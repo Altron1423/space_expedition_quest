@@ -17,8 +17,7 @@ from backend.src.application.exceptions import (
     MissingAccessJWTTokenError,
     AccessJWTDecodeError,
     MissingRefreshJWTTokenError,
-    RefreshJWTDecodeError, ProductNotFoundError, ProductAlreadyExistsError, ProductPermissionDeniedError,
-    PaginationValidationError, PermissionDeniedError, ProductInCart,
+    RefreshJWTDecodeError,
 )
 
 from backend.src.infrastructures.exceptions import (
@@ -140,52 +139,6 @@ def setup_exception_handlers(app: FastAPI) -> None:
             content={"message": str(exc)},
         )
 
-    @app.exception_handler(ProductNotFoundError)
-    async def product_not_found_exception_handler(
-            request: Request,
-            exc: ProductNotFoundError,
-    ) -> JSONResponse:
-        return JSONResponse(
-            status_code=status.HTTP_404_NOT_FOUND,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(ProductAlreadyExistsError)
-    async def product_already_exists_exception_handler(
-            request: Request,
-            exc: ProductAlreadyExistsError):
-        return JSONResponse(
-            status_code=status.HTTP_409_CONFLICT,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(PermissionDeniedError)
-    async def permission_denied_exception_handler(
-            request: Request,
-            exc: PermissionDeniedError):
-        return JSONResponse(
-            status_code=status.HTTP_403_FORBIDDEN,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(ProductPermissionDeniedError)
-    async def product_permission_denied_exception_handler(
-            request: Request,
-            exc: ProductPermissionDeniedError):
-        return JSONResponse(
-            status_code=status.HTTP_403_FORBIDDEN,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(PaginationValidationError)
-    async def pagination_validation_exception_handler(
-            request: Request,
-            exc: PaginationValidationError):
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": str(exc)},
-        )
-
     @app.exception_handler(UserNotAcceptTerms)
     async def user_not_accept_terms_exception_handler(
         request: Request,
@@ -255,17 +208,6 @@ def setup_exception_handlers(app: FastAPI) -> None:
             status_code=status.HTTP_401_UNAUTHORIZED,
             content={"message": str(exc)},
         )
-
-    @app.exception_handler(ProductInCart)
-    async def email_been_used_exception_handler(
-        request: Request,
-        exc: ProductInCart,
-    ) -> JSONResponse:
-        return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={"message": str(exc)},
-        )
-
 
     """
         Исключения инфраструктуры

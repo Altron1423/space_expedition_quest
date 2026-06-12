@@ -142,3 +142,13 @@ class LoginRequest(BaseRequest):
     )
 
     password: PasswordSchema = Field(..., description="Пароль")
+
+
+class DataSetRequest(BaseRequest):
+    elements: list[str] = Field(min_length=1, max_length=50)
+    answer: str = Field(min_length=1, max_length=200)
+
+class CreateProblemRequest(BaseRequest):
+    name: str = Field(min_length=1, max_length=50)
+    text: str = Field(min_length=1, max_length=1000)
+    data_set: list[DataSetRequest]

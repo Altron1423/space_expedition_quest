@@ -57,7 +57,7 @@ class ExampleRepositoriesSQLAlchemy:
             example: ExampleEntity
     ) -> None:
         """
-        Сохраняет новый артефакт или обновляет существующий в базе данных.
+        Сохраняет новый example или обновляет существующий в базе данных.
 
         :param example: ExampleEntity, которое должно сохраняться.
         :return:

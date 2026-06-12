@@ -6,16 +6,6 @@ from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class ProductResponse(BaseModel):
-    unique_id: UUID
-    title: str
-    description: str
-    price: Decimal
-    category: str
-    owner_id: UUID
-    owner_username: str
-    created_at: datetime
-
 class ExampleResponseSchema(BaseModel):
     model_config = ConfigDict(
         frozen=True,
@@ -31,6 +21,28 @@ class ExampleResponseSchema(BaseModel):
     description: str | None = Field(
         None, description="Необязательное описание example"
     )
+
+
+class DataSetResponseSchema(BaseModel):
+    unique_id: UUID = Field(..., description="Уникальный идентификатор набора данных")
+    elements: list[str] = Field(..., description="Значения набора данных")
+    answer: str = Field(..., description="Ответ для данных значений")
+
+class ProblemResponseSchema(BaseModel):
+    unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
+    name: str = Field(..., description="Название задачи")
+    text: str = Field(..., description="Текст задачи")
+    data_sets: list[DataSetResponseSchema] = Field(..., description="Варианты наборов значений с ответами для задач")
+
+class ProblemsResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    problems: list[ProblemResponseSchema] = Field(description="Задачи")
+
+
 
 class UserTokenResponseSchema(BaseModel):
     """
