@@ -22,9 +22,9 @@ repository: ProblemRepositoriesSQLAlchemy = ProblemRepositoriesSQLAlchemy()
 
 async def GetProblemsListFromRepoUseCase() -> list[ProblemDTO]:
     """
-    Выполняет сценарий для получения example из хранилища.
+    Выполняет сценарий для всех задач из хранилища.
 
-    :return: ProblemDTO, если он найден в репозитории, в противном случае отсутствует.
+    :return: list[ProblemDTO], все найденные задачи.
     """
 
     async with uow as session:
@@ -40,13 +40,28 @@ async def GetProblemsListFromRepoUseCase() -> list[ProblemDTO]:
 
 async def GetProblemByIdFromRepoUseCase(unique_id: UUID) -> Optional[ProblemDTO]:
     """
-    Выполняет сценарий для получения example из хранилища.
+    Выполняет сценарий для получения задачи из хранилища.
 
-    :return: ProblemDTO, если он найден в репозитории, в противном случае отсутствует.
+    :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
     """
 
     async with uow as session:
         problem_entity: Optional[ProblemEntity] = await repository.get_by_id(session, unique_id)
+        if problem_entity:
+            logger.info("Problem found in repository")
+        else:
+            logger.info("Problem not found in repository")
+        return problem_entity
+
+async def GetProblemByNameFromRepoUseCase(name: str) -> Optional[ProblemDTO]:
+    """
+    Выполняет сценарий для получения задачи из хранилища.
+
+    :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
+    """
+
+    async with uow as session:
+        problem_entity: Optional[ProblemEntity] = await repository.get_by_name(session, name)
         if problem_entity:
             logger.info("Problem found in repository")
         else:

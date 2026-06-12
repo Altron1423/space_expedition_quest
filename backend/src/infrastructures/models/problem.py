@@ -28,7 +28,11 @@ class ProblemModel(Base):
 
     data_sets: Mapped[list[DataSetModel]] = relationship(
         "DataSetModel",
-        back_populates="problems"
+        back_populates="problem"
+    )
+    stages: Mapped[list["StageModel"]] = relationship(
+        "StageModel",
+        back_populates="problem"
     )
 
     def __repr__(self) -> str:

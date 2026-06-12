@@ -28,15 +28,19 @@ class DataSetModel(Base):
     answer: Mapped[str] = mapped_column(Text, nullable=False)
 
 
-    problem: Mapped[UUID] = mapped_column(
+    problem_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),
         ForeignKey("problem.unique_id"),
         nullable=False,
     )
 
-    problems: Mapped["ProblemModel"] = relationship(
+    problem: Mapped["ProblemModel"] = relationship(
         "ProblemModel",
         back_populates="data_sets"
+    )
+    stages: Mapped[list["StageModel"]] = relationship(
+        "StageModel",
+        back_populates="data_set"
     )
 
 

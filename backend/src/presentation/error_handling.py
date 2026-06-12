@@ -11,6 +11,7 @@ from backend.src.domain.exceptions import (
 
 from backend.src.application.exceptions import (
     ExampleNotFoundError,
+    TeamAlreadyExistsError,
     UserNotAcceptTerms,
     EmailBeenUsedError,
     UserLoginError,
@@ -133,6 +134,15 @@ def setup_exception_handlers(app: FastAPI) -> None:
     async def example_not_found_exception_handler(
         request: Request,
         exc: ExampleNotFoundError,
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": str(exc)},
+        )
+    @app.exception_handler(TeamAlreadyExistsError)
+    async def example_not_found_exception_handler(
+        request: Request,
+        exc: TeamAlreadyExistsError,
     ) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,

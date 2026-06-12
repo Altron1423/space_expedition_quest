@@ -7,10 +7,14 @@ class ExampleNotFoundError(Exception):
 @final
 class ProblemAlreadyExistsError(Exception):
     """Исключение возникает, когда задача уже существует"""
+@final
+class TeamAlreadyExistsError(Exception):
+    """Исключение возникает, когда команда уже существует"""
 
 @final
 class CreateProblemUuidIsNone(Exception):
     """Исключение возникает, если в dto не был присвоен uuid"""
+
 
 # @final
 # class ProductNotFoundError(Exception):

@@ -1,9 +1,7 @@
-from datetime import datetime
-from typing import List
+from datetime import datetime, timedelta
 from uuid import UUID
-from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
 
 
 class ExampleResponseSchema(BaseModel):
@@ -41,6 +39,30 @@ class ProblemsResponseSchema(BaseModel):
         from_attributes=True,
     )
     problems: list[ProblemResponseSchema] = Field(description="Задачи")
+
+
+
+class StageResponseSchema(BaseModel):
+    unique_id: UUID = Field(..., description="Уникальный идентификатор набора данных")
+    stage: int = Field(..., description="Номер испытания")
+    problem: ProblemResponseSchema = Field(..., description="Условия решённой задачи")
+    data_set: DataSetResponseSchema = Field(..., description="Данные решённой задачи")
+    answer: str = Field(..., description="Ответ команды")
+    duration: timedelta = Field(..., description="Время затраченное на решение")
+
+class TeamResponseSchema(BaseModel):
+    unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
+    name: str = Field(..., description="Название задачи")
+    email: EmailStr = Field(..., description="Email команды")
+    stages: list[StageResponseSchema] = Field(..., description="Текст задачи")
+
+class TeamsResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    teams: list[TeamResponseSchema] = Field(description="Команды")
 
 
 

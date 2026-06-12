@@ -2,28 +2,30 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Request, Body
 
-from backend.src.application.dtos.problem import CreateProblemDTO, DataSetDTO
+from application.dtos.email import EmailDTO
+from application.dtos.team import CreateTeamDTO
+# from backend.src.application.dtos.problem import CreateProblemDTO, DataSetDTO
 # from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
-from backend.src.application.use_cases.problems.list_problems import GetProblemsUseCase
-from backend.src.application.use_cases.problems.create_problem import CreateProblemUseCase
-from backend.src.presentation.mappers.problem_mapper import (
-    ProblemsPresentationMapper,
-    ProblemPresentationMapper
+from backend.src.application.use_cases.teams.list_teams import GetTeamsUseCase
+from backend.src.application.use_cases.teams.create_team import CreateTeamUseCase
+from backend.src.presentation.mappers.team_mapper import (
+    TeamPresentationMapper,
+    TeamsPresentationMapper
 )
 from backend.src.presentation.schemas.request import (
-    CreateProblemRequest
+    CreateTeamRequest
 )
 from backend.src.presentation.schemas.responses import (
-    ProblemsResponseSchema,
-    ProblemResponseSchema
+    TeamsResponseSchema,
+    TeamResponseSchema
 )
 
 
-router = APIRouter(prefix="/problems", tags=["Problems"])
+router = APIRouter(prefix="/team", tags=["Team"])
 
 @router.get(
     "/get_all",
-    response_model=ProblemsResponseSchema,
+    response_model=TeamsResponseSchema,
     summary="Get all problems",
     responses={
         200: {"description": "Problems retrieved successfully"},
@@ -33,23 +35,23 @@ router = APIRouter(prefix="/problems", tags=["Problems"])
         502: {"description": "Failed to notify via message broker"},
     },
 )
-async def get_problems(
+async def get_teams(
     request: Request,
-) -> ProblemsResponseSchema:
+) -> TeamsResponseSchema:
     """
-    Возвращает все существующие задачи.
+    Возвращает все существующие команды.
     :param request:
     :return:
     """
 
     # await TokenValidatorUseCase(request)
-    problems_dto = await GetProblemsUseCase()
-    return ProblemsPresentationMapper.to_response(problems_dto)
+    problems_dto = await GetTeamsUseCase()
+    return TeamsPresentationMapper.to_response(problems_dto)
 
 
 @router.post(
     "/create",
-    response_model=ProblemResponseSchema,
+    response_model=TeamResponseSchema,
     summary="Create new problem",
     responses={
         200: {"description": "Problems retrieved successfully"},
@@ -61,33 +63,19 @@ async def get_problems(
 )
 async def create_product(
     request: Request,
-    body: CreateProblemRequest = Body(...),
-) -> ProblemResponseSchema:
+    body: CreateTeamRequest = Body(...),
+) -> TeamResponseSchema:
     """
     Создание нового продукта.
     """
 
     # user_id = await TokenValidatorUseCase(request)
 
-    problem_uuid = uuid4()
 
-    dto = CreateProblemDTO(
-        unique_id=problem_uuid,
+    dto = CreateTeamDTO(
         name=body.name,
-        text=body.text,
-        data_sets=[
-            DataSetDTO(
-                unique_id=uuid4(),
-                problem=problem_uuid,
-                elements=dset.elements,
-                answer=dset.answer,
-            )
-            for dset in body.data_set
-        ],
+        email=EmailDTO(value=body.email),
     )
 
-    product_dto = await CreateProblemUseCase(dto)
-    return ProblemPresentationMapper.to_response(product_dto)
-
-
-
+    product_dto = await CreateTeamUseCase(dto)
+    return TeamPresentationMapper.to_response(product_dto)

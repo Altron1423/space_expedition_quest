@@ -14,7 +14,6 @@ async def CreateProblemUseCase(dto: CreateProblemDTO) -> ProblemDTO:
     """
     Создаёт новую задачу и возвращает её.
 
-
     :return: ProblemDTO, созданная задача.
     """
     try:

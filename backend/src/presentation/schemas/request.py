@@ -145,10 +145,18 @@ class LoginRequest(BaseRequest):
 
 
 class DataSetRequest(BaseRequest):
-    elements: list[str] = Field(min_length=1, max_length=50)
-    answer: str = Field(min_length=1, max_length=200)
+    elements: list[str] = Field(min_length=1, max_length=50, description="Значения, подставляемые в задачу")
+    answer: str = Field(min_length=1, max_length=200, description="Целевой ответ")
 
 class CreateProblemRequest(BaseRequest):
-    name: str = Field(min_length=1, max_length=50)
-    text: str = Field(min_length=1, max_length=1000)
-    data_set: list[DataSetRequest]
+    name: str = Field(min_length=1, max_length=50, description="Название задачи")
+    text: str = Field(min_length=1, max_length=1000, description="Условие задачи")
+    data_set: list[DataSetRequest] = Field(..., description="Наборы данных")
+
+class CreateTeamRequest(BaseRequest):
+    name: str = Field(min_length=1, max_length=50, description="Название команды")
+    email: EmailStr = Field(
+        ...,
+        description="Email пользователя",
+        examples=["user@example.com", "john.doe@gmail.com"]
+    )
