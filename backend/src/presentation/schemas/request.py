@@ -15,6 +15,7 @@ class BaseRequest(BaseModel):
         json_schema_extra={}
     )
 
+
 class PasswordSchema(BaseModel):
     """
     Схема валидации пароля для переиспользования
@@ -55,7 +56,55 @@ class PasswordSchema(BaseModel):
         return v
 
 
-class RegisterRequest(BaseRequest):
+class AdminRegisterRequest(BaseRequest):
+    """
+    Запрос на регистрацию нового администратора
+
+    Пример:
+    {
+        "username": "Иван",
+        "email": "user@example.com",
+        "password": {
+            "value": "StrongP@ssw0rd"
+        }
+    }
+    """
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Иван",
+                "email": "user@example.com",
+                "password": {
+                    "value": "StrongP@ssw0rd"
+                }
+            }
+        }
+    )
+    name: str = Field(
+        ...,
+        description="Имя пользователя",
+        min_length=2,
+        max_length=50,
+        examples=["Иван", "John"]
+    )
+
+    email: EmailStr = Field(
+        ...,
+        description="Email пользователя",
+        examples=["user@example.com", "john.doe@gmail.com"]
+    )
+
+    password: PasswordSchema = Field(..., description="Пароль")
+
+
+    @validator('name')
+    def validate_name(cls, v):
+        """Валидация имени и фамилии"""
+        if not v.replace('-', '').replace(' ', '').isalpha():
+            raise ValueError('Имя должно содержать только буквы, пробелы и дефисы')
+        return v.strip().title()
+
+class TeamRegisterRequest(BaseRequest):
     """
     Запрос на регистрацию нового пользователя
 
@@ -72,16 +121,12 @@ class RegisterRequest(BaseRequest):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "username": "Иван",
-                "email": "user@example.com",
-                "password": {
-                    "value": "StrongP@ssw0rd"
-                },
-                "accept_terms": True
+                "name": "Иван",
+                "email": "user@example.com"
             }
         }
     )
-    username: str = Field(
+    name: str = Field(
         ...,
         description="Имя пользователя",
         min_length=2,
@@ -95,34 +140,17 @@ class RegisterRequest(BaseRequest):
         examples=["user@example.com", "john.doe@gmail.com"]
     )
 
-    password: PasswordSchema = Field(..., description="Пароль")
-
-    accept_terms: bool = Field(
-        ...,
-        description="Согласие с условиями использования",
-        examples=[True]
-    )
-
-
-    @validator('username')
+    @validator('name')
     def validate_name(cls, v):
         """Валидация имени и фамилии"""
         if not v.replace('-', '').replace(' ', '').isalpha():
-            raise ValueError('Имя должно содержать только буквы, пробелы и дефисы')
+            raise ValueError('Название должно содержать только буквы, пробелы и дефисы')
         return v.strip().title()
 
 
-class LoginRequest(BaseRequest):
+class AdminLoginRequest(BaseRequest):
     """
-    Запрос на вход пользователя
-
-    Пример:
-    {
-        "email": "user@example.com",
-        "password": {
-            "value": "StrongP@ssw0rd"
-        }
-    }
+    Запрос на вход администратора
     """
     model_config = ConfigDict(
         json_schema_extra={
@@ -140,6 +168,26 @@ class LoginRequest(BaseRequest):
         description="Email пользователя",
         examples=["user@example.com", "john.doe@gmail.com"]
     )
+
+    password: PasswordSchema = Field(..., description="Пароль")
+
+
+class TeamLoginRequest(BaseRequest):
+    """
+    Запрос на вход команды
+    """
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Team",
+                "password": {
+                    "value": "StrongP@ssw0rd"
+                }
+            }
+        }
+    )
+
+    name: str = Field(..., description="Название пользователя")
 
     password: PasswordSchema = Field(..., description="Пароль")
 

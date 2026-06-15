@@ -1,14 +1,13 @@
-from uuid import UUID, uuid4
-
 from fastapi import APIRouter, Request, Body
 
 from application.dtos.email import EmailDTO
 from application.dtos.team import CreateTeamDTO
+from application.use_cases.auth.token_validator import TokenValidatorUseCase
 # from backend.src.application.dtos.problem import CreateProblemDTO, DataSetDTO
 # from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
 from backend.src.application.use_cases.teams.list_teams import GetTeamsUseCase
 from backend.src.application.use_cases.teams.create_team import CreateTeamUseCase
-from backend.src.presentation.mappers.team_mapper import (
+from backend.src.presentation.mappers.team import (
     TeamPresentationMapper,
     TeamsPresentationMapper
 )
@@ -44,7 +43,8 @@ async def get_teams(
     :return:
     """
 
-    # await TokenValidatorUseCase(request)
+    await TokenValidatorUseCase(request)
+
     problems_dto = await GetTeamsUseCase()
     return TeamsPresentationMapper.to_response(problems_dto)
 
@@ -69,7 +69,7 @@ async def create_product(
     Создание нового продукта.
     """
 
-    # user_id = await TokenValidatorUseCase(request)
+    await TokenValidatorUseCase(request)
 
 
     dto = CreateTeamDTO(

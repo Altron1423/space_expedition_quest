@@ -13,58 +13,60 @@ if TYPE_CHECKING:
 
 logger = structlog.get_logger(__name__)
 
+class GetProblemFromRepoUseCase:
+    uow: UnitOfWorkSQLAlchemy = UnitOfWorkSQLAlchemy()
+    problems_mapper: ProblemMapper = ProblemMapper()
 
-uow: UnitOfWorkSQLAlchemy = UnitOfWorkSQLAlchemy()
-problems_mapper: ProblemMapper = ProblemMapper()
+    repository: ProblemRepositoriesSQLAlchemy = ProblemRepositoriesSQLAlchemy()
 
-repository: ProblemRepositoriesSQLAlchemy = ProblemRepositoriesSQLAlchemy()
+    @classmethod
+    async def GetLis(cls) -> list[ProblemDTO]:
+        """
+        Выполняет сценарий для всех задач из хранилища.
 
+        :return: list[ProblemDTO], все найденные задачи.
+        """
 
-async def GetProblemsListFromRepoUseCase() -> list[ProblemDTO]:
-    """
-    Выполняет сценарий для всех задач из хранилища.
+        async with cls.uow as session:
+            problem_entities: list[ProblemEntity] = await cls.repository.get_list(session)
+            if len(problem_entities) == 0:
+                logger.info("Problems not found in repository")
+            else:
+                logger.info("Problems found in repository")
+            return [
+                cls.problems_mapper.to_dto(problem_entity)
+                for problem_entity in problem_entities
+            ]
 
-    :return: list[ProblemDTO], все найденные задачи.
-    """
+    @classmethod
+    async def GetById(cls, unique_id: UUID) -> Optional[ProblemDTO]:
+        """
+        Выполняет сценарий для получения задачи из хранилища.
 
-    async with uow as session:
-        problem_entities: list[ProblemEntity] = await repository.get_list(session)
-        if len(problem_entities) == 0:
-            logger.info("Problems not found in repository")
-        else:
-            logger.info("Problems found in repository")
-        return [
-            problems_mapper.to_dto(problem_entity)
-            for problem_entity in problem_entities
-        ]
+        :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
+        """
 
-async def GetProblemByIdFromRepoUseCase(unique_id: UUID) -> Optional[ProblemDTO]:
-    """
-    Выполняет сценарий для получения задачи из хранилища.
+        async with cls.uow as session:
+            problem_entity: Optional[ProblemEntity] = await cls.repository.get_by_id(session, unique_id)
+            if problem_entity:
+                logger.info("Problem found in repository")
+            else:
+                logger.info("Problem not found in repository")
+            return problem_entity
 
-    :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
-    """
+    @classmethod
+    async def GetByName(cls, name: str) -> Optional[ProblemDTO]:
+        """
+        Выполняет сценарий для получения задачи из хранилища.
 
-    async with uow as session:
-        problem_entity: Optional[ProblemEntity] = await repository.get_by_id(session, unique_id)
-        if problem_entity:
-            logger.info("Problem found in repository")
-        else:
-            logger.info("Problem not found in repository")
-        return problem_entity
+        :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
+        """
 
-async def GetProblemByNameFromRepoUseCase(name: str) -> Optional[ProblemDTO]:
-    """
-    Выполняет сценарий для получения задачи из хранилища.
-
-    :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
-    """
-
-    async with uow as session:
-        problem_entity: Optional[ProblemEntity] = await repository.get_by_name(session, name)
-        if problem_entity:
-            logger.info("Problem found in repository")
-        else:
-            logger.info("Problem not found in repository")
-        return problem_entity
+        async with cls.uow as session:
+            problem_entity: Optional[ProblemEntity] = await cls.repository.get_by_name(session, name)
+            if problem_entity:
+                logger.info("Problem found in repository")
+            else:
+                logger.info("Problem not found in repository")
+            return problem_entity
 

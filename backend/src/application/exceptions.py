@@ -12,6 +12,10 @@ class TeamAlreadyExistsError(Exception):
     """Исключение возникает, когда команда уже существует"""
 
 @final
+class AdminAlreadyExistsError(Exception):
+    """Исключение возникает, когда Администратор уже существует"""
+
+@final
 class CreateProblemUuidIsNone(Exception):
     """Исключение возникает, если в dto не был присвоен uuid"""
 

@@ -3,11 +3,11 @@ from authx import exceptions
 
 from backend.src.application.exceptions import MissingRefreshJWTTokenError, RefreshJWTDecodeError
 from backend.src.application.security.jwt_security import security
-from backend.src.application.use_cases.auth.get_tocken import GetUserTokenUseCase
+from backend.src.application.use_cases.auth.get_tocken import GetTokenUseCase
 
 # logger = structlog.get_logger(__name__)
 
-async def RefreshUserTokenUseCase(request, response) -> dict[str, bool|str]:
+async def RefreshTokenUseCase(request, response) -> dict[str, bool | str]:
     """
     Выполняет процесс обновления jwt токена доступа пользователя по refresh токену.
 
@@ -24,6 +24,6 @@ async def RefreshUserTokenUseCase(request, response) -> dict[str, bool|str]:
     except exceptions.JWTDecodeError as e:
         raise RefreshJWTDecodeError(f"Invalid token or the access token has expired.")
 
-    tokens: dict[str, bool|str] = await GetUserTokenUseCase(refresh_payload.sub, response)
+    tokens: dict[str, bool|str] = await GetTokenUseCase(refresh_payload.sub, response)
     return tokens
 

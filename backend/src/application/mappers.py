@@ -2,10 +2,12 @@ from dataclasses import dataclass
 from typing import final
 from uuid import uuid4
 
+from application.dtos.admin import CreateAdminDTO
 from application.dtos.email import EmailDTO
 from application.dtos.password import PasswordDTO
 from application.dtos.stage import StageDTO
 from application.dtos.team import TeamDTO, CreateTeamDTO
+from application.security.password import hashing
 from backend.src.application.dtos.example import (
     ExampleDTO,
     SizeDTO,
@@ -18,6 +20,7 @@ from backend.src.domain.entities.example import ExampleEntity
 from backend.src.domain.entities.problem import ProblemEntity
 
 from backend.src.domain.value_objects.example_size import ExampleSize
+from domain.entities.admin import AdminEntity
 from domain.entities.stage import StageEntity
 from domain.entities.team import TeamEntity
 from domain.value_objects.email_user import UserEmail
@@ -241,9 +244,35 @@ class CreateTeamMapper:
         return TeamEntity(
             unique_id=uuid4(),
             name=dto.name,
-            password=UserPassword(value="qwerty"),
+            password=UserPassword(value=hashing("StrongP@ssw0rd")),
             email=UserEmail(value=dto.email.value),
             stages=[]
+        )
+
+
+@final
+@dataclass(frozen=True, slots=True)
+class CreateAdminMapper:
+    """
+    Средство отображения для преобразования между Domain Entities и Application DTOs.
+
+    Это средство отображения является частью прикладного уровня и обрабатывает преобразования между:
+    - Domain Entities (бизнес-логика)
+    - Application DTO (передача данных по сценарию использования)
+
+    Оно не решает проблемы инфраструктуры, такие как сериализация JSON.
+    """
+
+    @staticmethod
+    def to_entity(dto: CreateAdminDTO) -> AdminEntity:
+        """
+        Преобразуйте Application DTO в Domain Entity.
+        """
+        return AdminEntity(
+            unique_id=uuid4(),
+            name=dto.name,
+            password=UserPassword(value=dto.password.value),
+            email=UserEmail(value=dto.email.value)
         )
 
 

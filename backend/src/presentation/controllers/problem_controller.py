@@ -2,11 +2,12 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Request, Body
 
+from application.use_cases.auth.token_validator import TokenValidatorUseCase
 from backend.src.application.dtos.problem import CreateProblemDTO, DataSetDTO
 # from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
 from backend.src.application.use_cases.problems.list_problems import GetProblemsUseCase
 from backend.src.application.use_cases.problems.create_problem import CreateProblemUseCase
-from backend.src.presentation.mappers.problem_mapper import (
+from backend.src.presentation.mappers.problem import (
     ProblemsPresentationMapper,
     ProblemPresentationMapper
 )
@@ -42,7 +43,8 @@ async def get_problems(
     :return:
     """
 
-    # await TokenValidatorUseCase(request)
+    await TokenValidatorUseCase(request)
+
     problems_dto = await GetProblemsUseCase()
     return ProblemsPresentationMapper.to_response(problems_dto)
 
@@ -67,7 +69,7 @@ async def create_product(
     Создание нового продукта.
     """
 
-    # user_id = await TokenValidatorUseCase(request)
+    await TokenValidatorUseCase(request)
 
     problem_uuid = uuid4()
 

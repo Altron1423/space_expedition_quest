@@ -5,7 +5,7 @@ from uuid import UUID
 
 from backend.src.application.dtos.team import TeamDTO
 from backend.src.application.mappers import TeamMapper
-from backend.src.infrastructures.repositories.team import TeamRepositoriesSQLAlchemy
+from backend.src.infrastructures.repositories.admin import AdminRepositoriesSQLAlchemy
 from backend.src.infrastructures.uow import UnitOfWorkSQLAlchemy
 
 if TYPE_CHECKING:
@@ -13,11 +13,11 @@ if TYPE_CHECKING:
 
 logger = structlog.get_logger(__name__)
 
-class GetTeamFromRepoUseCase:
+class GetAdminFromRepoUseCase:
     uow: UnitOfWorkSQLAlchemy = UnitOfWorkSQLAlchemy()
     problems_mapper: TeamMapper = TeamMapper()
 
-    repository: TeamRepositoriesSQLAlchemy = TeamRepositoriesSQLAlchemy()
+    repository: AdminRepositoriesSQLAlchemy = AdminRepositoriesSQLAlchemy()
 
     @classmethod
     async def GetList(cls) -> list[TeamDTO]:
@@ -38,6 +38,7 @@ class GetTeamFromRepoUseCase:
                 for problem_entity in problem_entities
             ]
 
+
     @classmethod
     async def GetById(cls, unique_id: UUID) -> Optional[TeamDTO]:
         """
@@ -54,6 +55,7 @@ class GetTeamFromRepoUseCase:
                 logger.info("Team not found in repository")
             return problem_entity
 
+
     @classmethod
     async def GetByName(cls, name: str) -> Optional[TeamDTO]:
         """
@@ -64,6 +66,23 @@ class GetTeamFromRepoUseCase:
 
         async with cls.uow as session:
             problem_entity: Optional[TeamEntity] = await cls.repository.get_by_name(session, name)
+            if problem_entity:
+                logger.info("Team found in repository")
+            else:
+                logger.info("Team not found in repository")
+            return problem_entity
+
+
+    @classmethod
+    async def GetByEmail(cls, email: str) -> Optional[TeamDTO]:
+        """
+        Выполняет сценарий для получения команды из хранилища.
+
+        :return: TeamDTO, если она найдена в репозитории, в противном случае None.
+        """
+
+        async with cls.uow as session:
+            problem_entity: Optional[TeamEntity] = await cls.repository.get_by_email(session, email)
             if problem_entity:
                 logger.info("Team found in repository")
             else:

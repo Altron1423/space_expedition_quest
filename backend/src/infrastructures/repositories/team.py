@@ -9,8 +9,8 @@ from sqlalchemy.orm import selectinload
 
 from backend.src.domain.entities.team import TeamEntity
 from backend.src.infrastructures.exceptions import RepositoryGetError, RepositorySaveError, RepositoryConflictError
-from backend.src.infrastructures.mappers.team import TeamDBMapper
 from backend.src.infrastructures.models.team import TeamModel
+from backend.src.infrastructures.mappers.team import TeamDBMapper
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

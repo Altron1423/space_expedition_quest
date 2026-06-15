@@ -66,7 +66,7 @@ class TeamsResponseSchema(BaseModel):
 
 
 
-class UserTokenResponseSchema(BaseModel):
+class TokenResponseSchema(BaseModel):
     """
     Содержит результат авторизации, access token и refresh token.
     """

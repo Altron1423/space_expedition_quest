@@ -4,7 +4,7 @@ from fastapi import HTTPException
 
 from backend.src.application.dtos.team import TeamDTO
 from backend.src.application.use_cases.db.get_team_from_repo import (
-    GetTeamsListFromRepoUseCase,
+    GetTeamFromRepoUseCase,
 )
 from backend.src.infrastructures.exceptions import RepositoryGetError
 
@@ -19,7 +19,7 @@ async def GetTeamsUseCase() -> list[TeamDTO]:
     """
     try:
         # Берёт из базы
-        team_dto = await GetTeamsListFromRepoUseCase()
+        team_dto = await GetTeamFromRepoUseCase.GetList()
         return team_dto
     except RepositoryGetError as err:
         raise HTTPException(status_code=404, detail="Team not found")

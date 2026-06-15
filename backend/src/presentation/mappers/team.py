@@ -7,7 +7,7 @@ from backend.src.presentation.schemas.responses import (
     StageResponseSchema,
     TeamResponseSchema, TeamsResponseSchema,
 )
-from presentation.mappers.problem_mapper import ProblemPresentationMapper, DataSetPresentationMapper
+from presentation.mappers.problem import ProblemPresentationMapper, DataSetPresentationMapper
 from presentation.schemas.responses import DataSetResponseSchema
 
 

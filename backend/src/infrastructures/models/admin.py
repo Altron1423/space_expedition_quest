@@ -1,20 +1,20 @@
 from uuid import UUID
 
-from sqlalchemy import  String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
 from backend.src.infrastructures.models.base import Base
 
 
-class TeamModel(Base):
+class AdminModel(Base):
     """
     Модель SQLAlchemy для хранения примеров данных.
 
-    Сопоставляется с таблицей "team" в базе данных.
+    Сопоставляется с таблицей "admin" в базе данных.
     """
 
-    __tablename__ = 'team'
+    __tablename__ = 'admin'
 
     unique_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),
@@ -26,19 +26,14 @@ class TeamModel(Base):
     password: Mapped[str] = mapped_column(String(), nullable=False)
     email: Mapped[str] = mapped_column(String(), nullable=False)
 
-    stages: Mapped[list["StageModel"]] = relationship(
-        "StageModel",
-        back_populates="team"
-    )
-
 
 
     def __repr__(self) -> str:
         """
-        :return: строковое представление TeamModel.
+        :return: строковое представление AdminModel.
         """
         return (
-            f'<TeamModel(id={self.unique_id}> name={self.name})>'
+            f'<AdminModel(id={self.unique_id}> name={self.name})>'
         )
 
 

@@ -1,11 +1,5 @@
 from dataclasses import dataclass
 from typing import final
-from uuid import UUID
-
-from backend.src.application.dtos.problem import (
-    ProblemDTO
-)
-
 from backend.src.domain.entities.problem import ProblemEntity
 from backend.src.infrastructures.mappers.data_set import DataSetDBMapper
 from backend.src.infrastructures.models.problem import ProblemModel
