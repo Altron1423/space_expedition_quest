@@ -1,3 +1,5 @@
+import json
+
 import structlog
 from fastapi import HTTPException
 
@@ -25,7 +27,7 @@ async def AdminLoginUseCase(data: AdminLoginRequest, response) -> dict[str, bool
 
     try:
         # Берёт из базы
-        if not (user_entity := await GetAdminFromRepoUseCase.GetByEmail(data.email)):
+        if not (admin_entity := await GetAdminFromRepoUseCase.GetByEmail(data.email)):
             raise UserLoginError("Invalid email or password")
     except RepositoryGetError as err:
         raise HTTPException(status_code=520, detail="User unknow error")
@@ -33,10 +35,10 @@ async def AdminLoginUseCase(data: AdminLoginRequest, response) -> dict[str, bool
 
     logger.info(
         "User login completed",
-        unique_id=user_entity.unique_id,
+        unique_id=admin_entity.unique_id,
     )
-    if is_correct(data.password.value, str(user_entity.password)):
-        tokens: dict[str, bool|str] = await GetTokenUseCase("{'type': 'admin', 'unique_id': '"+str(user_entity.unique_id)+"'}", response)
+    if is_correct(data.password.value, str(admin_entity.password)):
+        tokens: dict[str, bool|str] = await GetTokenUseCase(json.dumps({'type': 'admin', 'unique_id': str(admin_entity.unique_id)}), response)
         return tokens
 
     raise UserLoginError("Invalid email or password")
@@ -54,7 +56,7 @@ async def TeamLoginUseCase(data: TeamLoginRequest, response) -> dict[str, bool |
 
     try:
         # Берёт из базы
-        if not (user_entity := await GetTeamFromRepoUseCase.GetByName(data.name)):
+        if not (team_entity := await GetTeamFromRepoUseCase.GetByName(data.name)):
             raise UserLoginError("Invalid name or password")
     except RepositoryGetError as err:
         raise HTTPException(status_code=520, detail="User unknow error")
@@ -62,10 +64,10 @@ async def TeamLoginUseCase(data: TeamLoginRequest, response) -> dict[str, bool |
 
     logger.info(
         "User login completed",
-        unique_id=user_entity.unique_id,
+        unique_id=team_entity.unique_id,
     )
-    if is_correct(data.password.value, str(user_entity.password)):
-        tokens: dict[str, bool|str] = await GetTokenUseCase("{'type': 'team', 'unique_id': '"+str(user_entity.unique_id)+"'}", response)
+    if is_correct(data.password.value, str(team_entity.password)):
+        tokens: dict[str, bool|str] = await GetTokenUseCase(json.dumps({'type': 'team', 'unique_id': str(team_entity.unique_id)}), response)
         return tokens
 
     raise UserLoginError("Invalid name or password")

@@ -208,6 +208,7 @@ class CreateTeamRequest(BaseRequest):
         description="Email пользователя",
         examples=["user@example.com", "john.doe@gmail.com"]
     )
+    event_id: UUID = Field(..., description="Уникальный id события, на которое регистрируются участники")
 
 class CreateEventRequest(BaseRequest):
     name: str = Field(min_length=1, max_length=50, description="Название соревнования")

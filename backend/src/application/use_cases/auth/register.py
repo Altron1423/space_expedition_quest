@@ -1,3 +1,4 @@
+import json
 import structlog
 from fastapi import HTTPException
 
@@ -45,7 +46,7 @@ async def RegisterUseCase(body: AdminRegisterRequest, response) -> dict[str, boo
     except RepositorySaveError as err:
         raise HTTPException(status_code=400, detail="Teams not created")
 
-    tokens: dict[str, bool|str] = await GetTokenUseCase("{'type': 'admin', 'unique_id': '"+str(admin_uuid)+"'}", response)
+    tokens: dict[str, bool|str] = await GetTokenUseCase(json.dumps({'type': 'admin', 'unique_id': str(admin_uuid)}), response)
 
     logger.info(
         "User registration completed",

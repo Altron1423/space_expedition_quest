@@ -33,6 +33,7 @@ class TeamDBMapper:
             name=model.name,
             password=UserPassword(value=model.password),
             email=UserEmail(value=model.email),
+            event_id=model.event_id,
             stages=[
                 StageDBMapper.to_entity(stage)
                 for stage in model.stages
@@ -53,6 +54,7 @@ class TeamDBMapper:
             name=entity.name,
             password=str(entity.password),
             email=str(entity.email),
+            event_id=entity.event_id,
             stages=[
                 StageDBMapper.to_model(stage)
                 for stage in entity.stages

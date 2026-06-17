@@ -2,7 +2,7 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Request, Body
 
-from application.use_cases.auth.token_validator import TokenValidatorUseCase
+from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
 from backend.src.application.dtos.event import CreateEventDTO
 # from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
 from backend.src.application.use_cases.events.list_events import GetEventsUseCase
@@ -69,7 +69,7 @@ async def create_event(
     Создание нового продукта.
     """
 
-    await TokenValidatorUseCase(request)
+    await TokenValidatorUseCase(request, StatusEnum.admin)
 
     event_uuid = uuid4()
 

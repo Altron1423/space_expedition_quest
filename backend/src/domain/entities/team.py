@@ -18,6 +18,7 @@ class TeamEntity:
     """
     unique_id: UUID
     name: str
+    event_id: UUID
     password: UserPassword = field(default_factory=UserPassword)
     email: UserEmail = field(default_factory=UserEmail)
     stages: list[StageEntity]

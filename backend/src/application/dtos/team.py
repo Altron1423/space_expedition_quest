@@ -36,5 +36,6 @@ class CreateTeamDTO:
 
     name: str
     email: EmailDTO
+    event_id: UUID
 
 

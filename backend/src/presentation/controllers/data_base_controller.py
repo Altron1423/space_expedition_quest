@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Response, Request
 
+from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
 from backend.src.application.use_cases.db.setup_database import SetupDatabaseUseCase
 
 router = APIRouter(prefix="/db", tags=["DataBase"])
@@ -18,6 +19,8 @@ async def setup_database(
     Перезапись базы данных (будет ограниченна)
     :return:
     """
+
+    await TokenValidatorUseCase(request, StatusEnum.admin)
 
     await SetupDatabaseUseCase.SetupDatabase()
     return {'success': True}

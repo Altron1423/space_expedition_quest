@@ -305,6 +305,7 @@ class CreateTeamMapper:
         return TeamEntity(
             unique_id=uuid4(),
             name=dto.name,
+            event_id=dto.event_id,
             password=UserPassword(value=hashing("StrongP@ssw0rd")),
             email=UserEmail(value=dto.email.value),
             stages=[]
