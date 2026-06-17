@@ -1,47 +1,44 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import final
 from uuid import UUID
 
-
-
-
-@final
-@dataclass(frozen=True, slots=True, kw_only=True)
-class DataSetDTO:
-    """Прикладной DTO для передачи данных примера между уровнями.
-
-    Примечание: Этот DTO не выполняет бизнес-проверку.
-    Бизнес-правила применяются сущностью домена (DatasetEntity)…
-    DTO являются простыми носителями данных для межуровневого взаимодействия.
-    """
-
-    unique_id: UUID
-    problem_id: UUID
-    elements: list[str]
-    answer: str
+from application.dtos.problem import ProblemDTO
+from application.dtos.team import TeamDTO
 
 
 @final
 @dataclass(frozen=True, slots=True, kw_only=True)
-class ProblemDTO:
+class EventDTO:
     """Прикладной DTO для передачи данных примера между уровнями.
 
     Примечание: Этот DTO не выполняет бизнес-проверку.
-    Бизнес-правила применяются сущностью домена (ProblemEntity)…
+    Бизнес-правила применяются сущностью домена (EventEntity)…
     DTO являются простыми носителями данных для межуровневого взаимодействия.
     """
 
     unique_id: UUID
     name: str
-    text: str
-    data_sets: list[DataSetDTO]
+    description: str
+    location: str
+    date: datetime
+    teams: list[TeamDTO]
+    problems: list[ProblemDTO]
 
 
 @final
 @dataclass(frozen=True, slots=True, kw_only=True)
-class CreateProblemDTO:
-    unique_id: UUID = None
-    name: str
-    text: str
-    data_sets: list[DataSetDTO]
+class CreateEventDTO:
+    """Прикладной DTO для передачи данных примера между уровнями.
 
+    Примечание: Этот DTO не выполняет бизнес-проверку.
+    Бизнес-правила применяются сущностью домена (EventEntity)…
+    DTO являются простыми носителями данных для межуровневого взаимодействия.
+    """
+
+    unique_id: UUID
+    name: str
+    description: str
+    location: str
+    date: datetime
+    problems: list[UUID]

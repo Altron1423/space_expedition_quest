@@ -16,6 +16,10 @@ class AdminAlreadyExistsError(Exception):
     """Исключение возникает, когда Администратор уже существует"""
 
 @final
+class EventAlreadyExistsError(Exception):
+    """Исключение возникает, когда Администратор уже существует"""
+
+@final
 class CreateProblemUuidIsNone(Exception):
     """Исключение возникает, если в dto не был присвоен uuid"""
 

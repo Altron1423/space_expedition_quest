@@ -65,6 +65,22 @@ class TeamsResponseSchema(BaseModel):
     teams: list[TeamResponseSchema] = Field(description="Команды")
 
 
+class EventResponseSchema(BaseModel):
+    unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
+    name: str = Field(..., description="Название соревнования")
+    description: str = Field(..., description="Описание соревнования")
+    location: str = Field(..., description="Место проведения соревнования")
+    date: datetime = Field(..., description="Описание соревнования")
+
+class EventsResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    events: list[EventResponseSchema] = Field(description="Соревнования")
+
+
 
 class TokenResponseSchema(BaseModel):
     """

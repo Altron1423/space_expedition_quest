@@ -11,7 +11,10 @@ from backend.src.domain.exceptions import (
 
 from backend.src.application.exceptions import (
     ExampleNotFoundError,
+    ProblemAlreadyExistsError,
     TeamAlreadyExistsError,
+    AdminAlreadyExistsError,
+    EventAlreadyExistsError,
     UserNotAcceptTerms,
     EmailBeenUsedError,
     UserLoginError,
@@ -30,7 +33,6 @@ from backend.src.infrastructures.exceptions import (
 from backend.src.presentation.exceptions import (
     PasswordError
 )
-
 
 
 def setup_exception_handlers(app: FastAPI) -> None:
@@ -127,6 +129,8 @@ def setup_exception_handlers(app: FastAPI) -> None:
         )
 
 
+
+
     """
         Исключения приложения
     """
@@ -139,10 +143,41 @@ def setup_exception_handlers(app: FastAPI) -> None:
             status_code=status.HTTP_404_NOT_FOUND,
             content={"message": str(exc)},
         )
+
+    @app.exception_handler(ProblemAlreadyExistsError)
+    async def example_not_found_exception_handler(
+        request: Request,
+        exc: ProblemAlreadyExistsError,
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": str(exc)},
+        )
+
     @app.exception_handler(TeamAlreadyExistsError)
     async def example_not_found_exception_handler(
         request: Request,
         exc: TeamAlreadyExistsError,
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": str(exc)},
+        )
+
+    @app.exception_handler(AdminAlreadyExistsError)
+    async def example_not_found_exception_handler(
+        request: Request,
+        exc: AdminAlreadyExistsError,
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": str(exc)},
+        )
+
+    @app.exception_handler(EventAlreadyExistsError)
+    async def example_not_found_exception_handler(
+        request: Request,
+        exc: EventAlreadyExistsError,
     ) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -219,6 +254,9 @@ def setup_exception_handlers(app: FastAPI) -> None:
             content={"message": str(exc)},
         )
 
+
+
+
     """
         Исключения инфраструктуры
     """
@@ -261,6 +299,8 @@ def setup_exception_handlers(app: FastAPI) -> None:
             status_code=status.HTTP_404_NOT_FOUND,
             content={"message": str(exc)},
         )
+
+
 
 
     """

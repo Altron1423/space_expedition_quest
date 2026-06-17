@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from application.dtos.admin import CreateAdminDTO
 from application.dtos.email import EmailDTO
+from application.dtos.event import EventDTO, CreateEventDTO
 from application.dtos.password import PasswordDTO
 from application.dtos.stage import StageDTO
 from application.dtos.team import TeamDTO, CreateTeamDTO
@@ -21,6 +22,7 @@ from backend.src.domain.entities.problem import ProblemEntity
 
 from backend.src.domain.value_objects.example_size import ExampleSize
 from domain.entities.admin import AdminEntity
+from domain.entities.event import EventEntity
 from domain.entities.stage import StageEntity
 from domain.entities.team import TeamEntity
 from domain.value_objects.email_user import UserEmail
@@ -47,7 +49,7 @@ class DataSetMapper:
         """
         return DataSetDTO(
             unique_id=entity.unique_id,
-            problem=entity.problem,
+            problem_id=entity.problem_id,
             elements=entity.elements,
             answer=entity.answer,
         )
@@ -59,7 +61,7 @@ class DataSetMapper:
         """
         return DataSetEntity(
             unique_id=dto.unique_id,
-            problem=dto.problem,
+            problem_id=dto.problem_id,
             elements=dto.elements,
             answer=dto.answer,
         )
@@ -162,6 +164,7 @@ class StageMapper:
             stage=entity.stage,
             problem=ProblemMapper.to_dto(entity.problem),
             data_set=DataSetMapper.to_dto(entity.data_set),
+            answer=entity.answer,
             duration=entity.duration,
         )
 
@@ -175,6 +178,7 @@ class StageMapper:
             stage=dto.stage,
             problem=ProblemMapper.to_entity(dto.problem),
             data_set=DataSetMapper.to_entity(dto.data_set),
+            answer=dto.answer,
             duration=dto.duration,
         )
 
@@ -225,6 +229,63 @@ class TeamMapper:
 
 @final
 @dataclass(frozen=True, slots=True)
+class EventMapper:
+    """
+    Средство отображения для преобразования между Domain Entities и Application DTOs.
+
+    Это средство отображения является частью прикладного уровня и обрабатывает преобразования между:
+    - Domain Entities (бизнес-логика)
+    - Application DTO (передача данных по сценарию использования)
+
+    Оно не решает проблемы инфраструктуры, такие как сериализация JSON.
+    """
+
+    @staticmethod
+    def to_dto(entity: EventEntity) -> EventDTO:
+        """
+        Преобразуйте Domain Entity в Application DTO.
+        """
+        return EventDTO(
+            unique_id=entity.unique_id,
+            name=entity.name,
+            description=entity.description,
+            location=entity.location,
+            date=entity.date,
+            teams=[
+                TeamMapper.to_dto(team)
+                for team in entity.teams
+            ],
+            problems=[
+                ProblemMapper.to_dto(problem)
+                for problem in entity.problems
+            ]
+        )
+
+    @staticmethod
+    def to_entity(dto: EventDTO) -> EventEntity:
+        """
+        Преобразуйте Application DTO в Domain Entity.
+        """
+        return EventEntity(
+            unique_id=dto.unique_id,
+            name=dto.name,
+            description=dto.description,
+            location=dto.location,
+            date=dto.date,
+            teams=[
+                TeamMapper.to_entity(team)
+                for team in dto.teams
+            ],
+            problems=[
+                ProblemMapper.to_entity(problem)
+                for problem in dto.problems
+            ]
+        )
+
+
+
+@final
+@dataclass(frozen=True, slots=True)
 class CreateTeamMapper:
     """
     Средство отображения для преобразования между Domain Entities и Application DTOs.
@@ -249,7 +310,6 @@ class CreateTeamMapper:
             stages=[]
         )
 
-
 @final
 @dataclass(frozen=True, slots=True)
 class CreateAdminMapper:
@@ -273,6 +333,34 @@ class CreateAdminMapper:
             name=dto.name,
             password=UserPassword(value=dto.password.value),
             email=UserEmail(value=dto.email.value)
+        )
+
+@final
+@dataclass(frozen=True, slots=True)
+class CreateEventMapper:
+    """
+    Средство отображения для преобразования между Domain Entities и Application DTOs.
+
+    Это средство отображения является частью прикладного уровня и обрабатывает преобразования между:
+    - Domain Entities (бизнес-логика)
+    - Application DTO (передача данных по сценарию использования)
+
+    Оно не решает проблемы инфраструктуры, такие как сериализация JSON.
+    """
+
+    @staticmethod
+    def to_entity(dto: CreateEventDTO) -> EventEntity:
+        """
+        Преобразуйте Application DTO в Domain Entity.
+        """
+        return EventEntity(
+            unique_id=uuid4(),
+            name=dto.name,
+            description=dto.description,
+            location=dto.location,
+            date=dto.date,
+            teams=[],
+            problems=[]
         )
 
 

@@ -61,7 +61,7 @@ async def get_problems(
         502: {"description": "Failed to notify via message broker"},
     },
 )
-async def create_product(
+async def create_problem(
     request: Request,
     body: CreateProblemRequest = Body(...),
 ) -> ProblemResponseSchema:
@@ -80,7 +80,7 @@ async def create_product(
         data_sets=[
             DataSetDTO(
                 unique_id=uuid4(),
-                problem=problem_uuid,
+                problem_id=problem_uuid,
                 elements=dset.elements,
                 answer=dset.answer,
             )

@@ -20,7 +20,7 @@ async def GetProblemsUseCase() -> list[ProblemDTO]:
     """
     try:
         # Берёт из базы
-        problem_dto = await GetProblemFromRepoUseCase.GetLis()
+        problem_dto = await GetProblemFromRepoUseCase.GetList()
         return problem_dto
     except RepositoryGetError as err:
         raise HTTPException(status_code=404, detail="Problems not found")

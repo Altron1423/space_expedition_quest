@@ -1,8 +1,8 @@
 import re
+from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, ConfigDict, Field, validator
-
-from decimal import Decimal
 
 from backend.src.presentation.exceptions import PasswordError
 
@@ -208,3 +208,10 @@ class CreateTeamRequest(BaseRequest):
         description="Email пользователя",
         examples=["user@example.com", "john.doe@gmail.com"]
     )
+
+class CreateEventRequest(BaseRequest):
+    name: str = Field(min_length=1, max_length=50, description="Название соревнования")
+    description: str = Field(min_length=1, max_length=300, description="Описание соревнования")
+    location: str = Field(min_length=1, max_length=75, description="Место проведения соревнования")
+    date: datetime = Field(..., description="Дата проведения соревнования")
+    problems: list[UUID] = Field(..., description="Набор задач для соревнования")

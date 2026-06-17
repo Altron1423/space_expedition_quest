@@ -57,6 +57,13 @@ class ProblemDBMapper:
 
         :return: сущность Domain  ProblemEntity.
         """
+        print("ProblemDBMapper",
+            model.unique_id,
+            model.name,
+            model.text,
+            model.data_sets,
+            sep="\n\t"
+        )
         return ProblemEntity(
             unique_id=model.unique_id,
             name=model.name,

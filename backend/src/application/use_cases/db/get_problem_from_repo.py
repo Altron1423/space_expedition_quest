@@ -3,7 +3,7 @@ import structlog
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
-from backend.src.application.dtos.problem import ProblemDTO
+from backend.src.domain.entities.problem import ProblemEntity
 from backend.src.application.mappers import ProblemMapper
 from backend.src.infrastructures.repositories.problem import ProblemRepositoriesSQLAlchemy
 from backend.src.infrastructures.uow import UnitOfWorkSQLAlchemy
@@ -20,11 +20,11 @@ class GetProblemFromRepoUseCase:
     repository: ProblemRepositoriesSQLAlchemy = ProblemRepositoriesSQLAlchemy()
 
     @classmethod
-    async def GetLis(cls) -> list[ProblemDTO]:
+    async def GetList(cls) -> list[ProblemEntity]:
         """
         Выполняет сценарий для всех задач из хранилища.
 
-        :return: list[ProblemDTO], все найденные задачи.
+        :return: list[ProblemEntity], все найденные задачи.
         """
 
         async with cls.uow as session:
@@ -39,11 +39,11 @@ class GetProblemFromRepoUseCase:
             ]
 
     @classmethod
-    async def GetById(cls, unique_id: UUID) -> Optional[ProblemDTO]:
+    async def GetById(cls, unique_id: UUID) -> Optional[ProblemEntity]:
         """
         Выполняет сценарий для получения задачи из хранилища.
 
-        :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
+        :return: ProblemEntity, если она найдена в репозитории, в противном случае None.
         """
 
         async with cls.uow as session:
@@ -55,11 +55,11 @@ class GetProblemFromRepoUseCase:
             return problem_entity
 
     @classmethod
-    async def GetByName(cls, name: str) -> Optional[ProblemDTO]:
+    async def GetByName(cls, name: str) -> Optional[ProblemEntity]:
         """
         Выполняет сценарий для получения задачи из хранилища.
 
-        :return: ProblemDTO, если она найдена в репозитории, в противном случае None.
+        :return: ProblemEntity, если она найдена в репозитории, в противном случае None.
         """
 
         async with cls.uow as session:

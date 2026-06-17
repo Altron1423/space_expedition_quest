@@ -26,7 +26,7 @@ class InfrastructureDataSetMapper:
         """
         return {
             "unique_id": str(dto.unique_id),
-            "problem": str(dto.problem),
+            "problem": str(dto.problem_id),
             "elements": dto.elements,
             "answer": dto.answer
         }
@@ -37,7 +37,7 @@ class InfrastructureDataSetMapper:
         """
         return DataSetDTO(
             unique_id=UUID(data["unique_id"]),
-            problem=UUID(data["problem"]),
+            problem_id=UUID(data["problem"]),
             elements=data["elements"],
             answer=data["answer"]
         )
@@ -63,7 +63,7 @@ class DataSetDBMapper:
         """
         return DataSetEntity(
             unique_id=model.unique_id,
-            problem=model.problem,
+            problem_id=model.problem_id,
             elements=model.element,
             answer=model.answer
         )
@@ -79,7 +79,7 @@ class DataSetDBMapper:
         """
         return DataSetModel(
             unique_id=entity.unique_id,
-            problem=entity.problem,
+            problem_id=entity.problem_id,
             element=entity.elements,
             answer=entity.answer
         )

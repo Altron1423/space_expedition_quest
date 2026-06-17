@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import  String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
@@ -26,9 +26,19 @@ class TeamModel(Base):
     password: Mapped[str] = mapped_column(String(), nullable=False)
     email: Mapped[str] = mapped_column(String(), nullable=False)
 
+    event_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("event.unique_id"),
+        nullable=False,
+    )
+
     stages: Mapped[list["StageModel"]] = relationship(
         "StageModel",
         back_populates="team"
+    )
+    events: Mapped["EventModel"] = relationship(
+        back_populates="teams",
+        secondary="team_event_bind"
     )
 
 

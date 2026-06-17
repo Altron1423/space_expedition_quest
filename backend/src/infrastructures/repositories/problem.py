@@ -61,8 +61,10 @@ class ProblemRepositoriesSQLAlchemy:
         :raise RepositorySaveError: Если во время извлечения возникает ошибка базы данных.
         """
         try:
-            stmt = select(ProblemModel).where(
-                ProblemModel.unique_id == problem_id
+            stmt = (
+                select(ProblemModel)
+                .where(ProblemModel.unique_id == problem_id)
+                .options(selectinload(ProblemModel.data_sets))
             )
             result = await session.execute(stmt)
             problem_model = result.scalar_one_or_none()
@@ -85,11 +87,13 @@ class ProblemRepositoriesSQLAlchemy:
         :param session: AsyncSession, сессия для работы с базой данных.
         :param problem_name: Название задачи.
         :return: Задача, если он найдена, в противном случае - None.
-        :raise RepositorySaveError: Если во время извлечения возникает ошибка базы данных.
+        :raise RepositoryGetError: Если во время извлечения возникает ошибка базы данных.
         """
         try:
-            stmt = select(ProblemModel).where(
-                ProblemModel.name == problem_name
+            stmt = (
+                select(ProblemModel)
+                .where(ProblemModel.name == problem_name)
+                .options(selectinload(ProblemModel.data_sets))
             )
             result = await session.execute(stmt)
             problem_model = result.scalar_one_or_none()
@@ -133,13 +137,13 @@ class ProblemRepositoriesSQLAlchemy:
 
         except IntegrityError as err:
             raise RepositoryConflictError(
-                f"Conflict while saving problem '{problem.unique_id}': {err}"
+                f"Conflict while saving problem '{problem.name}': {err}"
             ) from err
         except SQLAlchemyError as err:
             raise RepositorySaveError(
-                f"Failed to save problem '{problem.unique_id}': {err}"
+                f"Failed to save problem '{problem.name}': {err}"
             ) from err
         except Exception as err:
             raise RepositorySaveError(
-                f"Unexpected error while saving problem '{problem.unique_id}': {err}"
+                f"Unexpected error while saving problem '{problem.name}': {err}"
             ) from err

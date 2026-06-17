@@ -49,7 +49,7 @@ class DataSetModel(Base):
         :return: строковое представление DataSetModel.
         """
         return (
-            f'<DataSetModel(id={self.unique_id}> problem={self.problem})>'
+            f'<DataSetModel(id={self.unique_id}> problem={self.problem_id})>'
         )
 
 
