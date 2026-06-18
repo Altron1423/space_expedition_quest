@@ -1,0 +1,169 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Космос Квест – Мой профиль</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="profile.css" />
+</head>
+<body>
+
+<div class="container">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">КОСМОС</div>
+        <div class="menu">
+            <a class="menu-link" href="index.html">Задачи</a>
+            <a class="menu-link" href="theory.html">Теория</a>
+            <a class="menu-link" href="progress.html">Прогресс</a>
+            <a class="menu-link" href="leaderboard.html">Таблица лидеров</a>
+        </div>
+        <div class="profile" id="profileNav">
+            <div class="avatar" id="profileAvatar"></div>
+            <div>
+                <div>Профиль</div>
+                <small id="profileName">KosmosNav99</small>
+            </div>
+        </div>
+    </nav>
+
+    <h1 class="title">👨‍🚀 МОЙ ПРОФИЛЬ</h1>
+
+    <div class="profile-grid">
+        <!-- Левая колонка: аватар и основная информация -->
+        <div class="profile-card">
+            <div class="profile-card-inner">
+                <div class="avatar-large" id="avatarLarge">
+                    <span id="avatarEmoji">🚀</span>
+                </div>
+                <h2 id="displayName">KosmosNav99</h2>
+                <p class="user-title" id="userTitle">Хранитель Кода</p>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="statXP">0</span>
+                        <span class="stat-label">Всего XP</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="statLevels">0</span>
+                        <span class="stat-label">Пройдено уровней</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="statRank">#0</span>
+                        <span class="stat-label">Место в рейтинге</span>
+                    </div>
+                </div>
+                <button class="edit-profile-btn" id="editProfileBtn">✏️ Редактировать профиль</button>
+            </div>
+        </div>
+
+        <!-- Правая колонка: детальная информация -->
+        <div class="profile-details">
+            <!-- Вкладки -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="stats">📊 Статистика</button>
+                <button class="tab-btn" data-tab="achievements">🏅 Достижения</button>
+                <button class="tab-btn" data-tab="settings">⚙️ Настройки</button>
+            </div>
+
+            <!-- Содержимое вкладок -->
+            <div class="tab-content">
+                <!-- Вкладка: Статистика -->
+                <div class="tab-panel active" id="tabStats">
+                    <div class="stats-grid-detailed">
+                        <div class="stat-box-detailed">
+                            <div class="stat-icon">⭐</div>
+                            <div>
+                                <div class="stat-number" id="detailXP">0</div>
+                                <div class="stat-label">Общий XP</div>
+                            </div>
+                        </div>
+                        <div class="stat-box-detailed">
+                            <div class="stat-icon">✅</div>
+                            <div>
+                                <div class="stat-number" id="detailSolved">0/12</div>
+                                <div class="stat-label">Пройдено уровней</div>
+                            </div>
+                        </div>
+                        <div class="stat-box-detailed">
+                            <div class="stat-icon">🎯</div>
+                            <div>
+                                <div class="stat-number" id="detailAccuracy">0%</div>
+                                <div class="stat-label">Точность ответов</div>
+                            </div>
+                        </div>
+                        <div class="stat-box-detailed">
+                            <div class="stat-icon">⏱️</div>
+                            <div>
+                                <div class="stat-number" id="detailAvgTime">0 мин</div>
+                                <div class="stat-label">Среднее время</div>
+                            </div>
+                        </div>
+                        <div class="stat-box-detailed">
+                            <div class="stat-icon">🏆</div>
+                            <div>
+                                <div class="stat-number" id="detailBestXP">0</div>
+                                <div class="stat-label">Лучший XP за уровень</div>
+                            </div>
+                        </div>
+                        <div class="stat-box-detailed">
+                            <div class="stat-icon">📈</div>
+                            <div>
+                                <div class="stat-number" id="detailProgress">0%</div>
+                                <div class="stat-label">Общий прогресс</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Достижения -->
+                <div class="tab-panel" id="tabAchievements">
+                    <div class="achievements-grid" id="achievementsContainer">
+                        <!-- Достижения будут добавлены скриптом -->
+                    </div>
+                </div>
+
+                <!-- Вкладка: Настройки -->
+                <div class="tab-panel" id="tabSettings">
+                    <div class="settings-group">
+                        <h3>👤 Изменить имя</h3>
+                        <div class="settings-row">
+                            <input type="text" id="newUsername" placeholder="Новое имя пользователя" maxlength="20" />
+                            <button class="settings-btn" id="saveUsernameBtn">Сохранить</button>
+                        </div>
+                        <small style="color: #8899bb;">Имя должно содержать только буквы, цифры и символы _ -</small>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>🎨 Аватар</h3>
+                        <div class="avatar-options">
+                            <button class="avatar-option" data-emoji="🚀">🚀</button>
+                            <button class="avatar-option" data-emoji="👨‍🚀">👨‍🚀</button>
+                            <button class="avatar-option" data-emoji="🛸">🛸</button>
+                            <button class="avatar-option" data-emoji="🌌">🌌</button>
+                            <button class="avatar-option" data-emoji="⭐">⭐</button>
+                            <button class="avatar-option" data-emoji="🪐">🪐</button>
+                            <button class="avatar-option" data-emoji="🌠">🌠</button>
+                            <button class="avatar-option" data-emoji="🤖">🤖</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>🗑️ Опасная зона</h3>
+                        <button class="settings-btn danger" id="resetAllBtn">Сбросить весь прогресс</button>
+                        <small style="color: #ff6b6b;">Это действие нельзя отменить. Все данные будут удалены.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключаем JavaScript -->
+<script src="profile.js"></script>
+</body>
+</html>

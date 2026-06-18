@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космос Квест – Код Галактики</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .timer-panel {
+            background: rgba(0,0,0,0.6);
+            border-radius: 16px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd966;
+        }
+        .timer-value {
+            font-size: 28px;
+            font-family: monospace;
+            color: #00ffcc;
+        }
+        .xp-potential {
+            font-size: 14px;
+            color: #aaa;
+        }
+        .show-task-btn {
+            width: 100%;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 18px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #00d9ff, #b14cff);
+            transition: .3s;
+        }
+        .show-task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0,217,255,.5);
+        }
+        .task-section {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar">
+        <div class="logo">КОСМОС</div>
+        <div class="menu">
+            <a class="menu-link active" href="index.html">Задачи</a>
+            <a class="menu-link" href="theory.html">Теория</a>
+            <a class="menu-link" href="progress.html">Прогресс</a>
+            <a class="menu-link" href="leaderboard.html">Таблица лидеров</a>
+        </div>
+        <a href="profile.html" style="text-decoration: none; color: inherit;">
+            <div class="profile" id="profileNav">
+                <div class="avatar" id="profileAvatar">🚀</div>
+                <div>
+                    <div>Профиль</div>
+                    <small id="profileName">KosmosNav99</small>
+                </div>
+            </div>
+        </a>
+    </nav>
+
+    <h1 class="title">КОД ГАЛАКТИКИ: НАСЛЕДИЕ ПРОТОНА</h1>
+
+    <div class="content">
+        <!-- Левая колонка: комикс + задание -->
+        <div class="card" id="comicCard">
+            <div class="card-inner">
+                <div class="task-title" id="levelTitle">ЗАГРУЗКА...</div>
+                <div class="task-image" id="comicPlaceholder">
+                    🎬 КОМИКС: [СКРИНШОТ]
+                </div>
+                <div class="task-text" id="comicText">
+                    Загрузка сюжета...
+                </div>
+
+                <!-- Кнопка показа задания -->
+                <button id="showTaskBtn" class="show-task-btn">📋 ПОКАЗАТЬ ЗАДАНИЕ</button>
+
+                <!-- Секция задания (изначально скрыта) -->
+                <div id="taskSection" class="task-section hidden">
+                    <div class="task-text" id="taskText" style="margin-top: 20px; font-weight: bold;">
+                        <!-- Текст задания появится здесь -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка: прогресс, таймер, ответ, помощь -->
+        <div class="sidebar">
+            <div class="progress-card">
+                <div class="panel">
+                    <div class="progress-top">
+                        <span id="xpDisplay">0 XP</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-fill" id="xpProgressFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="timer-panel">
+                        ⏱️ Время на задание:<br>
+                        <span class="timer-value" id="timerDisplay">--:--</span><br>
+                        <span class="xp-potential" id="potentialXP">⏳ Нажмите "Показать задание"</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-card" id="answerCard">
+                <div class="panel">
+                    <h3>Ваш ответ</h3>
+                    <input id="answer" type="text" placeholder="Введите ответ..." disabled>
+                    <button id="submitBtn" class="submit" disabled>ПОДТВЕРДИТЬ ОТВЕТ</button>
+                    <div id="result" class="answer-result"></div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="panel">
+                    <div class="help-item" id="hintBtn">💡 Подсказка</div>
+                    <div class="help-item" id="resetBtn">🔄 Сбросить прогресс</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
