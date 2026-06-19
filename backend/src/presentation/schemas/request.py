@@ -200,6 +200,8 @@ class CreateProblemRequest(BaseRequest):
     name: str = Field(min_length=1, max_length=50, description="Название задачи")
     text: str = Field(min_length=1, max_length=1000, description="Условие задачи")
     stage: int = Field(..., description="Этап задачи.")
+    max_time: int = Field(..., description="Время, после которого начисляемые очки = 0. (в сек)")
+    min_time: int = Field(..., description="Время, до которого очки за решения уменьшаться не будет. (в сек)")
     data_set: list[DataSetRequest] = Field(..., description="Наборы данных")
 
 class CreateTeamRequest(BaseRequest):

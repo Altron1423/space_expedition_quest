@@ -18,6 +18,8 @@ class ProblemEntity:
     name: str
     text: str
     stage: int
+    max_time: int
+    min_time: int
     data_sets: list[DataSetEntity]
 
     def __post_init__(self) -> None:
