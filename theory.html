@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космос Квест – Теория</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        details {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,217,255,0.3);
+        }
+        summary {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #00d9ff;
+        }
+        .theory-content {
+            margin-top: 15px;
+            line-height: 1.6;
+            padding-left: 20px;
+            border-left: 3px solid #00d9ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar">
+        <div class="logo">КОСМОС</div>
+        <div class="menu">
+            <a class="menu-link" href="index.html">Задачи</a>
+            <a class="menu-link active" href="theory.html">Теория</a>
+            <a class="menu-link" href="progress.html">Прогресс</a>
+            <a class="menu-link" href="leaderboard.html">Таблица лидеров</a>
+        </div>
+        <div class="profile">
+            <div class="avatar"></div>
+            <div>
+                <div>Профиль</div>
+                <small id="profileName">KosmosNav99</small>
+            </div>
+        </div>
+    </nav>
+
+    <h1 class="title">ТЕОРЕТИЧЕСКАЯ БАЗА</h1>
+
+    <div class="content" style="grid-template-columns: 1fr;">
+        <!-- Выпадающий список: Сюжет -->
+        <details>
+            <summary>📖 Сюжет игры</summary>
+            <div class="theory-content">
+                <p>Игроки помогают экипажу корабля «Аргус» исследовать таинственный сигнал с планеты Ксерон-7. Пройдя сквозь руины древней цивилизации Протонов, команда сталкивается с кодовыми замками, алгоритмическими завалами, лабиринтами логики, шифрами, передачей данных и поиском пути. После успешного завершения отборочного этапа открывается финальный ледяной архив Аквилона, где задания становятся сложнее.</p>
+            </div>
+        </details>
+
+        <!-- Выпадающий список: Персонажи -->
+        <details>
+            <summary>👨‍🚀 Персонажи</summary>
+            <div class="theory-content">
+                <ul style="margin-left: 20px;">
+                    <li><strong>Капитан Лео</strong> – лидер команды, ярко-синий акцент. Принимает решения, указывает путь.</li>
+                    <li><strong>Астра</strong> – навигатор и картограф, фиолетовый акцент. Считает маршруты и логические развилки.</li>
+                    <li><strong>Тео</strong> – инженер, оранжевый акцент. Отвечает за взлом замков и робота «Байта».</li>
+                    <li><strong>Робот «Байт»</strong> – талисман, маленький колёсный робот с синим глазом. Помогает в алгоритмических задачах.</li>
+                </ul>
+            </div>
+        </details>
+
+        <!-- Выпадающий список: Виды задач -->
+        <details>
+            <summary>🧩 Типы заданий</summary>
+            <div class="theory-content">
+                <ul>
+                    <li><strong>Системы счисления</strong> – перевод чисел из двоичной, восьмеричной, шестнадцатеричной в десятичную.</li>
+                    <li><strong>Алгоритмы</strong> – поиск оптимального маршрута для робота, минимизация шагов.</li>
+                    <li><strong>Булева логика</strong> – вычисление истинности выражений с AND, OR, NOT.</li>
+                    <li><strong>Шифры</strong> – дешифровка и шифрование методом Цезаря (ROT13 и другие сдвиги).</li>
+                    <li><strong>Измерение информации</strong> – расчёт времени передачи файлов, объёма данных.</li>
+                    <li><strong>Графы</strong> – нахождение кратчайшего пути по взвешенной схеме комнат.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>🚀 Как играть</summary>
+            <div class="theory-content">
+                <p>На главной странице последовательно появляются комиксы и задания. Введите ответ в поле и нажмите «Подтвердить ответ». За каждый правильный ответ вы получаете XP, которые увеличивают ваш уровень. Если ответ неверный – можно использовать подсказку. Прогресс автоматически сохраняется в браузере. После прохождения всех 12 уровней вы увидите финальный экран победы.</p>
+            </div>
+        </details>
+    </div>
+</div>
+
+<script>
+    const savedProfile = localStorage.getItem("profileData");
+    const profile = savedProfile ? JSON.parse(savedProfile) : {};
+    document.getElementById("profileName").innerText = profile.username || localStorage.getItem("registeredTeamName") || "KosmosNav99";
+</script>
+</body>
+</html>

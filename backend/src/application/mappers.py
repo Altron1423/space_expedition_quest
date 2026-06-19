@@ -89,8 +89,6 @@ class ProblemMapper:
             name=entity.name,
             text=entity.text,
             stage=entity.stage,
-            max_time=entity.max_time,
-            min_time=entity.min_time,
             data_sets=[
                 DataSetMapper.to_dto(dset)
                 for dset in entity.data_sets
@@ -107,8 +105,6 @@ class ProblemMapper:
             name=dto.name,
             text=dto.text,
             stage=dto.stage,
-            max_time=dto.max_time,
-            min_time=dto.min_time,
             data_sets=[
                 DataSetMapper.to_entity(dset)
                 for dset in dto.data_sets
@@ -140,8 +136,6 @@ class CreateProblemMapper:
             name=dto.name,
             text=dto.text,
             stage=dto.stage,
-            max_time=dto.max_time,
-            min_time=dto.min_time,
             data_sets=[
                 DataSetMapper.to_entity(dset)
                 for dset in dto.data_sets

@@ -78,8 +78,6 @@ async def create_problem(
         name=body.name,
         text=body.text,
         stage=body.stage,
-        max_time=body.max_time,
-        min_time=body.min_time,
         data_sets=[
             DataSetDTO(
                 unique_id=uuid4(),

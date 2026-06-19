@@ -62,8 +62,6 @@ class ProblemDBMapper:
             name=model.name,
             text=model.text,
             stage=model.stage,
-            max_time=model.max_time,
-            min_time=model.min_time,
             data_sets=[
                 DataSetDBMapper.to_entity(dset)
                 for dset in model.data_sets
@@ -84,8 +82,6 @@ class ProblemDBMapper:
             name=entity.name,
             text=entity.text,
             stage=entity.stage,
-            max_time=entity.max_time,
-            min_time=entity.min_time,
             data_sets=[
                 DataSetDBMapper.to_model(dset)
                 for dset in entity.data_sets

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космос Квест - Регистрация команды</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .registration-wrap {
+            min-height: calc(100vh - 50px);
+            display: grid;
+            align-items: center;
+            padding: 25px 0 60px;
+        }
+
+        .registration-card {
+            width: min(560px, 100%);
+            margin: 0 auto;
+            padding: 2px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #00d9ff, rgba(0,217,255,.12), rgba(177,76,255,.12), #b14cff);
+        }
+
+        .registration-inner {
+            background: #071122;
+            border-radius: 26px;
+            padding: 34px;
+            box-shadow: 0 0 40px rgba(0,217,255,.12);
+        }
+
+        .registration-inner h1 {
+            margin: 0 0 12px;
+            font-size: 38px;
+            line-height: 1.12;
+        }
+
+        .registration-inner p {
+            color: #d4def5;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .registration-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .registration-form label {
+            display: grid;
+            gap: 8px;
+            color: #d4def5;
+            font-weight: 700;
+        }
+
+        .registration-form input {
+            min-height: 54px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 16px;
+            background: rgba(255,255,255,.05);
+            color: white;
+            padding: 0 18px;
+            font: inherit;
+            outline: none;
+        }
+
+        .registration-form input:focus {
+            border-color: rgba(0,217,255,.75);
+            box-shadow: 0 0 0 4px rgba(0,217,255,.12);
+        }
+
+        .registration-form button {
+            min-height: 58px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font: inherit;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #00d9ff, #b14cff);
+            transition: .3s;
+        }
+
+        .registration-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 24px rgba(0,217,255,.35);
+        }
+
+        .registration-form button:disabled {
+            cursor: wait;
+            opacity: .75;
+            transform: none;
+        }
+
+        .registration-message {
+            min-height: 22px;
+            color: #00ffcc;
+            font-weight: 600;
+        }
+
+        .registration-message.error {
+            color: #ff7c9b;
+        }
+    </style>
+</head>
+<body>
+<div class="container registration-wrap">
+    <div class="registration-card">
+        <div class="registration-inner">
+            <div class="logo" style="font-size: 34px; margin-bottom: 22px;">КОСМОС</div>
+            <h1>Регистрация команды</h1>
+            <p>Оставьте название команды и почту для обратной связи. После сохранения заявки на сервере откроется основной сайт квеста.</p>
+
+            <form class="registration-form" id="registrationForm">
+                <label>
+                    Название команды
+                    <input id="teamName" name="name" type="text" minlength="2" maxlength="50" autocomplete="organization" required>
+                </label>
+                <label>
+                    Почта для обратной связи
+                    <input id="teamEmail" name="email" type="email" autocomplete="email" required>
+                </label>
+                <button id="submitButton" type="submit">Отправить заявку</button>
+                <div class="registration-message" id="registrationMessage" role="status" aria-live="polite"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("registrationForm");
+    const message = document.getElementById("registrationMessage");
+    const submitButton = document.getElementById("submitButton");
+    const apiBase = "http://127.0.0.1:8000/api";
+
+    function saveTeamLocally(name, email) {
+        const savedProfile = localStorage.getItem("profileData");
+        const profile = savedProfile ? JSON.parse(savedProfile) : {};
+
+        localStorage.setItem("registeredTeamName", name);
+        localStorage.setItem("registeredTeamEmail", email);
+        localStorage.setItem("isRegistered", "true");
+        localStorage.setItem("profileData", JSON.stringify({
+            username: name,
+            avatar: profile.avatar || "🚀",
+            totalXP: parseInt(localStorage.getItem("totalXP")) || 0,
+            completedLevels: JSON.parse(localStorage.getItem("completedLevels")) || [],
+            attempts: profile.attempts || {},
+            startTimes: profile.startTimes || {}
+        }));
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        message.classList.remove("error");
+
+        if (!form.checkValidity()) {
+            message.textContent = "Проверьте название команды и адрес почты.";
+            message.classList.add("error");
+            return;
+        }
+
+        const name = document.getElementById("teamName").value.trim();
+        const email = document.getElementById("teamEmail").value.trim();
+        submitButton.disabled = true;
+        message.textContent = "Сохраняем заявку на сервере...";
+
+        try {
+            const response = await fetch(`${apiBase}/registration-applications`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email })
+            });
+
+            if (!response.ok) {
+                throw new Error("server_error");
+            }
+
+            saveTeamLocally(name, email);
+            message.textContent = "Заявка сохранена. Переходим к квесту...";
+            window.setTimeout(() => {
+                window.location.href = "index.html";
+            }, 700);
+        } catch (error) {
+            message.textContent = "Не удалось сохранить заявку. Проверьте, что backend запущен.";
+            message.classList.add("error");
+            submitButton.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>

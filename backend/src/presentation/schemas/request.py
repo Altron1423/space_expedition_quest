@@ -200,8 +200,6 @@ class CreateProblemRequest(BaseRequest):
     name: str = Field(min_length=1, max_length=50, description="Название задачи")
     text: str = Field(min_length=1, max_length=1000, description="Условие задачи")
     stage: int = Field(..., description="Этап задачи.")
-    max_time: int = Field(..., description="Время, после которого начисляемые очки = 0. (в сек)")
-    min_time: int = Field(..., description="Время, до которого очки за решения уменьшаться не будет. (в сек)")
     data_set: list[DataSetRequest] = Field(..., description="Наборы данных")
 
 class CreateTeamRequest(BaseRequest):
@@ -212,6 +210,14 @@ class CreateTeamRequest(BaseRequest):
         examples=["user@example.com", "john.doe@gmail.com"]
     )
     event_id: UUID = Field(..., description="Уникальный id события, на которое регистрируются участники")
+
+class RegistrationApplicationRequest(BaseRequest):
+    name: str = Field(min_length=2, max_length=50, description="Название команды")
+    email: EmailStr = Field(
+        ...,
+        description="Почта для обратной связи",
+        examples=["team@example.com"]
+    )
 
 class CreateEventRequest(BaseRequest):
     name: str = Field(min_length=1, max_length=50, description="Название соревнования")

@@ -65,6 +65,21 @@ class TeamsResponseSchema(BaseModel):
     )
     teams: list[TeamResponseSchema] = Field(description="Команды")
 
+class RegistrationApplicationResponseSchema(BaseModel):
+    unique_id: UUID = Field(..., description="Уникальный идентификатор заявки")
+    name: str = Field(..., description="Название команды")
+    email: EmailStr = Field(..., description="Почта для обратной связи")
+    status: str = Field(..., description="Статус заявки")
+    created_at: datetime = Field(..., description="Дата создания заявки")
+
+class RegistrationApplicationsResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    applications: list[RegistrationApplicationResponseSchema] = Field(description="Заявки")
+
 
 class EventResponseSchema(BaseModel):
     unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
