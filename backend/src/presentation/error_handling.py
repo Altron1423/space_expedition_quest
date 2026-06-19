@@ -5,8 +5,7 @@ from backend.src.domain.exceptions import (
     DomainValidationError,
     InvalidSizeException,
     InvalidEmailException,
-    InvalidPasswordException, InvalidProductTitleException, InvalidProductDescriptionException,
-    InvalidProductPriceException, InvalidCategoryNameException
+    InvalidPasswordException
 )
 
 from backend.src.application.exceptions import (
@@ -82,46 +81,6 @@ def setup_exception_handlers(app: FastAPI) -> None:
     async def invalid_password_exception_handler(
         request: Request,
         exc: InvalidPasswordException,
-    ) -> JSONResponse:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(InvalidProductTitleException)
-    async def invalid_product_title_exception_handler(
-            request: Request,
-            exc: InvalidProductTitleException,
-    ) -> JSONResponse:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(InvalidProductDescriptionException)
-    async def invalid_product_description_exception_handler(
-            request: Request,
-            exc: InvalidProductDescriptionException,
-    ) -> JSONResponse:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(InvalidProductPriceException)
-    async def invalid_product_price_exception_handler(
-            request: Request,
-            exc: InvalidProductPriceException,
-    ) -> JSONResponse:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": str(exc)},
-        )
-
-    @app.exception_handler(InvalidCategoryNameException)
-    async def invalid_product_price_exception_handler(
-            request: Request,
-            exc: InvalidCategoryNameException,
     ) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,

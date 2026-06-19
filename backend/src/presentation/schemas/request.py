@@ -219,3 +219,8 @@ class CreateEventRequest(BaseRequest):
     location: str = Field(min_length=1, max_length=75, description="Место проведения соревнования")
     date: datetime = Field(..., description="Дата проведения соревнования")
     problems: list[UUID] = Field(..., description="Набор задач для соревнования")
+
+class FinishStageRequest(BaseRequest):
+    answer: str = Field(min_length=1, max_length=50, description="Ответ команды")
+    problems_id: UUID = Field(..., description="Уникальный id задачи")
+    data_set_id: UUID = Field(..., description="Уникальный id набора данных для задачи")

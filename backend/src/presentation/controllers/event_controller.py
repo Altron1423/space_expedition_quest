@@ -20,7 +20,7 @@ from backend.src.presentation.schemas.responses import (
 )
 
 
-router = APIRouter(prefix="/even", tags=["Events"])
+router = APIRouter(prefix="/event", tags=["Events"])
 
 @router.get(
     "/get_all",

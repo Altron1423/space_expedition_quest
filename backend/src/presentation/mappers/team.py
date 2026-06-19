@@ -1,13 +1,14 @@
 from dataclasses import dataclass
 from typing import final
 
-from application.dtos.stage import StageDTO
+from application.dtos.stage import StageDTO, StageDataDTO, FinishStageDataDTO
 from application.dtos.team import (
     TeamDTO, TeamPasswordDTO
 )
 from backend.src.presentation.schemas.responses import (
     StageResponseSchema,
-    TeamResponseSchema, TeamsResponseSchema, TeamPasswordResponseSchema,
+    TeamResponseSchema, TeamsResponseSchema, TeamPasswordResponseSchema, StageDataResponseSchema,
+    FinishStageDataResponseSchema,
 )
 from presentation.mappers.problem import ProblemPresentationMapper, DataSetPresentationMapper
 from presentation.schemas.responses import DataSetResponseSchema, ListTeamsPasswordResponseSchema
@@ -131,7 +132,7 @@ class TeamsPasswordPresentationMapper:
 
 @final
 @dataclass(frozen=True, slots=True)
-class TeamsPasswordPresentationMapper:
+class StageDataPresentationMapper:
     """
     Средство отображения для преобразования Application DTOs в Presentation Response models.
 
@@ -139,15 +140,37 @@ class TeamsPasswordPresentationMapper:
     в соответствии с принципами чистой архитектуры.
     """
 
-    mapper = TeamPasswordPresentationMapper
 
     @classmethod
-    def to_response(cls, dto: list[TeamPasswordDTO]) -> ListTeamsPasswordResponseSchema:
+    def to_response(cls, dto: StageDataDTO) -> StageDataResponseSchema:
         """Преобразуйте Application DTO в API Response model."""
-        return ListTeamsPasswordResponseSchema(
-            teams=[
-                TeamPasswordPresentationMapper.to_response(i_dto)
-                for i_dto in dto
-            ]
+        return StageDataResponseSchema(
+            name=dto.name,
+            text=dto.text,
+            stage=dto.stage,
+            png_name=dto.png_name,
+            problem_id=dto.problem_id,
+            data_set_id=dto.data_set_id,
+            max_time=dto.max_time,
+            min_time=dto.min_time
+        )
+
+@final
+@dataclass(frozen=True, slots=True)
+class FinishStageDataPresentationMapper:
+    """
+    Средство отображения для преобразования Application DTOs в Presentation Response models.
+
+    Это средство отображения изолирует уровень представления от прямых зависимостей от Application DTOs,
+    в соответствии с принципами чистой архитектуры.
+    """
+
+
+    @classmethod
+    def to_response(cls, dto: FinishStageDataDTO) -> FinishStageDataResponseSchema:
+        """Преобразуйте Application DTO в API Response model."""
+        return FinishStageDataResponseSchema(
+            complete=dto.complete,
+            comics_png_name=dto.comics_png_name,
         )
 

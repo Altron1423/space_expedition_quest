@@ -56,6 +56,3 @@ class TeamPasswordDTO:
     name: str
     email: EmailDTO
     password: str
-
-
-

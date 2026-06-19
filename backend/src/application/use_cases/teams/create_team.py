@@ -2,6 +2,7 @@ import structlog
 
 from fastapi import HTTPException
 
+from application.use_cases.db.get_event_from_repo import GetEventFromRepoUseCase
 from backend.src.application.exceptions import TeamAlreadyExistsError
 from backend.src.application.use_cases.db.create_team_in_repo import CreateTeamInRepoUseCase
 from backend.src.application.dtos.team import TeamDTO, CreateTeamDTO
@@ -23,6 +24,13 @@ async def CreateTeamUseCase(dto: CreateTeamDTO) -> TeamDTO:
             raise TeamAlreadyExistsError("Team with this name already exists")
     except RepositoryGetError as err:
         raise HTTPException(status_code=404, detail="Teams check error")
+
+    try:
+        event_dto = await GetEventFromRepoUseCase.GetById(dto.event_id)
+        if event_dto is None:
+            raise TeamAlreadyExistsError("Event with this id not exists")
+    except RepositoryGetError as err:
+        raise HTTPException(status_code=404, detail="Events not found")
 
     try:
         unique_id = await CreateTeamInRepoUseCase(dto)

@@ -83,6 +83,30 @@ class ListTeamsPasswordResponseSchema(BaseModel):
     )
     teams: list[TeamPasswordResponseSchema] = Field(..., description="Наборы информации про команды (название, почта, пароль)")
 
+class StageDataResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    name: str = Field(..., description="Название задачи")
+    text: str = Field(..., description="Полное условие задачи")
+    stage: int = Field(..., description="Этап задачи")
+    png_name: str = Field(..., description="Название картинки для задачи")
+    problem_id: UUID = Field(..., description="Уникальный id задачи")
+    data_set_id: UUID = Field(..., description="Уникальный id набора данных для задачи")
+    max_time: int = Field(..., description="Время, после которого начисляемые очки = 0. (в сек)")
+    min_time: int = Field(..., description="Время, до которого очки за решения уменьшаться не будет. (в сек)")
+
+class FinishStageDataResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    complete: bool = Field(..., description="Истинно, если задача решена верно, в обратном случае - ложно.")
+    comics_png_name: str | None = Field(..., description="Если задача решена верно, название картинки комикса, иначе - None.")
+
 
 class EventResponseSchema(BaseModel):
     unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
