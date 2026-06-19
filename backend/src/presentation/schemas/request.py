@@ -199,6 +199,7 @@ class DataSetRequest(BaseRequest):
 class CreateProblemRequest(BaseRequest):
     name: str = Field(min_length=1, max_length=50, description="Название задачи")
     text: str = Field(min_length=1, max_length=1000, description="Условие задачи")
+    stage: int = Field(..., description="Этап задачи.")
     data_set: list[DataSetRequest] = Field(..., description="Наборы данных")
 
 class CreateTeamRequest(BaseRequest):

@@ -88,6 +88,7 @@ class ProblemMapper:
             unique_id=entity.unique_id,
             name=entity.name,
             text=entity.text,
+            stage=entity.stage,
             data_sets=[
                 DataSetMapper.to_dto(dset)
                 for dset in entity.data_sets
@@ -103,6 +104,7 @@ class ProblemMapper:
             unique_id=dto.unique_id,
             name=dto.name,
             text=dto.text,
+            stage=dto.stage,
             data_sets=[
                 DataSetMapper.to_entity(dset)
                 for dset in dto.data_sets
@@ -133,6 +135,7 @@ class CreateProblemMapper:
             unique_id=dto.unique_id,
             name=dto.name,
             text=dto.text,
+            stage=dto.stage,
             data_sets=[
                 DataSetMapper.to_entity(dset)
                 for dset in dto.data_sets
@@ -205,6 +208,9 @@ class TeamMapper:
             name=entity.name,
             password=PasswordDTO(value=entity.password.value),
             email=EmailDTO(value=entity.email.value),
+            stage_mow=entity.stage_mow,
+            start_stage=entity.start_stage,
+            event_id=entity.event_id,
             stages=[
                 StageMapper.to_dto(dset)
                 for dset in entity.stages
@@ -221,10 +227,13 @@ class TeamMapper:
             name=dto.name,
             password=UserPassword(value=dto.password.value),
             email=UserEmail(value=dto.email.value),
+            stage_mow=dto.stage_mow,
+            start_stage=dto.start_stage,
+            event_id=dto.event_id,
             stages=[
                 StageMapper.to_entity(dset)
                 for dset in dto.stages
-            ]
+            ],
         )
 
 @final

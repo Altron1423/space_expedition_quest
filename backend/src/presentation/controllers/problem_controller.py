@@ -77,6 +77,7 @@ async def create_problem(
         unique_id=problem_uuid,
         name=body.name,
         text=body.text,
+        stage=body.stage,
         data_sets=[
             DataSetDTO(
                 unique_id=uuid4(),

@@ -17,6 +17,7 @@ class ProblemEntity:
     unique_id: UUID
     name: str
     text: str
+    stage: int
     data_sets: list[DataSetEntity]
 
     def __post_init__(self) -> None:

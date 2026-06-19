@@ -1,6 +1,7 @@
+from datetime import datetime, UTC
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import DateTime, func, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
@@ -25,6 +26,14 @@ class TeamModel(Base):
     name: Mapped[str] = mapped_column(String(length=20), nullable=False)
     password: Mapped[str] = mapped_column(String(), nullable=False)
     email: Mapped[str] = mapped_column(String(), nullable=False)
+
+    stage_now: Mapped[int] = mapped_column(nullable=False)
+    start_stage: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(UTC),
+        server_default=func.now()
+    )
 
     event_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),

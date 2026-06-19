@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime, UTC
 from typing import final
 from uuid import UUID
 
@@ -18,9 +19,11 @@ class TeamEntity:
     """
     unique_id: UUID
     name: str
-    event_id: UUID
     password: UserPassword = field(default_factory=UserPassword)
     email: UserEmail = field(default_factory=UserEmail)
+    stage_mow: int
+    start_stage: datetime = field(default_factory=lambda: datetime.now(UTC))
+    event_id: UUID
     stages: list[StageEntity]
 
     def __post_init__(self) -> None:

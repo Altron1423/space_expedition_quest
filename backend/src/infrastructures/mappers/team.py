@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from typing import final
 
 from backend.src.domain.entities.team import TeamEntity
-from backend.src.infrastructures.mappers.data_set import DataSetDBMapper
 from backend.src.infrastructures.models.team import TeamModel
 from domain.value_objects.email_user import UserEmail
 from domain.value_objects.password import UserPassword
@@ -33,6 +32,8 @@ class TeamDBMapper:
             name=model.name,
             password=UserPassword(value=model.password),
             email=UserEmail(value=model.email),
+            stage_mow=model.stage_now,
+            start_stage=model.start_stage,
             event_id=model.event_id,
             stages=[
                 StageDBMapper.to_entity(stage)
@@ -54,6 +55,8 @@ class TeamDBMapper:
             name=entity.name,
             password=str(entity.password),
             email=str(entity.email),
+            stage_now=entity.stage_mow,
+            start_stage=entity.start_stage,
             event_id=entity.event_id,
             stages=[
                 StageDBMapper.to_model(stage)
@@ -74,8 +77,10 @@ class TeamDBMapper:
         :param entity: Объект домена TeamEntity, содержащий новые данные.
         """
         model.name = entity.name
-        model.text = entity.text
-        model.data_set = [
-            DataSetDBMapper.to_model(dset)
-            for dset in entity.data_sets
+        model.event_id = entity.event_id
+        model.password = str(entity.password)
+        model.email = str(entity.email)
+        model.stages = [
+            StageDBMapper.to_model(stage)
+            for stage in entity.stages
         ]

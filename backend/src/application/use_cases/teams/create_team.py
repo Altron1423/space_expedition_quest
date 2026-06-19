@@ -22,7 +22,7 @@ async def CreateTeamUseCase(dto: CreateTeamDTO) -> TeamDTO:
         if team_dto is not None:
             raise TeamAlreadyExistsError("Team with this name already exists")
     except RepositoryGetError as err:
-        raise HTTPException(status_code=404, detail="Teams not found")
+        raise HTTPException(status_code=404, detail="Teams check error")
 
     try:
         unique_id = await CreateTeamInRepoUseCase(dto)

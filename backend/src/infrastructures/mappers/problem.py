@@ -57,17 +57,11 @@ class ProblemDBMapper:
 
         :return: сущность Domain  ProblemEntity.
         """
-        print("ProblemDBMapper",
-            model.unique_id,
-            model.name,
-            model.text,
-            model.data_sets,
-            sep="\n\t"
-        )
         return ProblemEntity(
             unique_id=model.unique_id,
             name=model.name,
             text=model.text,
+            stage=model.stage,
             data_sets=[
                 DataSetDBMapper.to_entity(dset)
                 for dset in model.data_sets
@@ -87,6 +81,7 @@ class ProblemDBMapper:
             unique_id=entity.unique_id,
             name=entity.name,
             text=entity.text,
+            stage=entity.stage,
             data_sets=[
                 DataSetDBMapper.to_model(dset)
                 for dset in entity.data_sets
@@ -107,6 +102,7 @@ class ProblemDBMapper:
         """
         model.name = entity.name
         model.text = entity.text
+        model.stage = entity.stage
         model.data_set = [
             DataSetDBMapper.to_model(dset)
             for dset in entity.data_sets

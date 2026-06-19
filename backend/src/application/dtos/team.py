@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import final
 from uuid import UUID
 
@@ -21,6 +22,9 @@ class TeamDTO:
     name: str
     password: PasswordDTO
     email: EmailDTO
+    stage_mow: int
+    start_stage: datetime
+    event_id: UUID
     stages: list[StageDTO]
 
 

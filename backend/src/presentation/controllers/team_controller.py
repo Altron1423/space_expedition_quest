@@ -50,7 +50,7 @@ async def get_teams(
 
 
 @router.post(
-    "/create",
+    "/register",
     response_model=TeamResponseSchema,
     summary="Create new problem",
     responses={
@@ -61,7 +61,7 @@ async def get_teams(
         502: {"description": "Failed to notify via message broker"},
     },
 )
-async def create_product(
+async def register_team(
     request: Request,
     body: CreateTeamRequest = Body(...),
 ) -> TeamResponseSchema:
@@ -69,7 +69,7 @@ async def create_product(
     Создание нового продукта.
     """
 
-    await TokenValidatorUseCase(request, StatusEnum.admin)
+    await TokenValidatorUseCase(request)
 
 
     dto = CreateTeamDTO(
@@ -78,5 +78,5 @@ async def create_product(
         event_id=body.event_id,
     )
 
-    product_dto = await CreateTeamUseCase(dto)
-    return TeamPresentationMapper.to_response(product_dto)
+    team_dto = await CreateTeamUseCase(dto)
+    return TeamPresentationMapper.to_response(team_dto)

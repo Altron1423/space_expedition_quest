@@ -25,6 +25,7 @@ class ProblemModel(Base):
 
     name: Mapped[str] = mapped_column(String(length=20), nullable=False)
     text: Mapped[str] = mapped_column(Text, nullable=False)
+    stage: Mapped[int] = mapped_column(nullable=False)
 
     data_sets: Mapped[list[DataSetModel]] = relationship(
         "DataSetModel",

@@ -30,6 +30,7 @@ class ProblemResponseSchema(BaseModel):
     unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
     name: str = Field(..., description="Название задачи")
     text: str = Field(..., description="Текст задачи")
+    stage: int = Field(..., description="Этап задачи")
     data_sets: list[DataSetResponseSchema] = Field(..., description="Варианты наборов значений с ответами для задач")
 
 class ProblemsResponseSchema(BaseModel):

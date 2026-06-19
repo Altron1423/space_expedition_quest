@@ -34,6 +34,7 @@ class ProblemDTO:
     unique_id: UUID
     name: str
     text: str
+    stage: int
     data_sets: list[DataSetDTO]
 
 
@@ -43,5 +44,6 @@ class CreateProblemDTO:
     unique_id: UUID = None
     name: str
     text: str
+    stage: int
     data_sets: list[DataSetDTO]
 

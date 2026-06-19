@@ -52,6 +52,7 @@ class ProblemPresentationMapper:
             unique_id=dto.unique_id,
             name=dto.name,
             text=dto.text,
+            stage=dto.stage,
             data_sets=data_sets,
         )
 
