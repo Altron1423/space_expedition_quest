@@ -43,3 +43,19 @@ class CreateTeamDTO:
     event_id: UUID
 
 
+@final
+@dataclass(frozen=True, slots=True, kw_only=True)
+class TeamPasswordDTO:
+    """Прикладной DTO для передачи данных примера между уровнями.
+
+    Примечание: Этот DTO не выполняет бизнес-проверку.
+    Бизнес-правила применяются сущностью домена (TeamEntity)…
+    DTO являются простыми носителями данных для межуровневого взаимодействия.
+    """
+
+    name: str
+    email: EmailDTO
+    password: str
+
+
+

@@ -42,3 +42,18 @@ class CreateEventDTO:
     location: str
     date: datetime
     problems: list[UUID]
+
+
+@final
+@dataclass(frozen=True, slots=True, kw_only=True)
+class LeaderboardDTO:
+    """Прикладной DTO для передачи данных примера между уровнями.
+
+    Примечание: Этот DTO не выполняет бизнес-проверку.
+    Бизнес-правила применяются сущностью домена (EventEntity)…
+    DTO являются простыми носителями данных для межуровневого взаимодействия.
+    """
+
+    name: str
+    score: int
+    stage: int

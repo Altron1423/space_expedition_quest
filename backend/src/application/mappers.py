@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime, UTC
 from typing import final
 from uuid import uuid4
 
@@ -323,6 +324,8 @@ class CreateTeamMapper:
             event_id=dto.event_id,
             password=UserPassword(value=hashing("StrongP@ssw0rd")),
             email=UserEmail(value=dto.email.value),
+            stage_mow=0,
+            start_stage=datetime.now(UTC),
             stages=[]
         )
 

@@ -65,6 +65,24 @@ class TeamsResponseSchema(BaseModel):
     )
     teams: list[TeamResponseSchema] = Field(description="Команды")
 
+class TeamPasswordResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    name: str = Field(..., description="Название задачи")
+    email: EmailStr = Field(..., description="Email команды")
+    password: str = Field(..., description="Пароль команды")
+
+class ListTeamsPasswordResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    teams: list[TeamPasswordResponseSchema] = Field(..., description="Наборы информации про команды (название, почта, пароль)")
+
 
 class EventResponseSchema(BaseModel):
     unique_id: UUID = Field(..., description="Уникальный идентификатор задачи")
@@ -81,6 +99,23 @@ class EventsResponseSchema(BaseModel):
     )
     events: list[EventResponseSchema] = Field(description="Соревнования")
 
+class LeaderboardElementResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    name: str = Field(..., description="Название задачи")
+    score: int = Field(..., description="Очки команды команды")
+    stage: int = Field(..., description="Этап продвижения команды")
+
+class ListLeaderboardResponseSchema(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        from_attributes=True,
+    )
+    teams: list[LeaderboardElementResponseSchema] = Field(..., description="Пара из команды и набранных очков")
 
 
 class TokenResponseSchema(BaseModel):

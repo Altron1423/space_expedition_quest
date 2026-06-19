@@ -2,13 +2,15 @@ from dataclasses import dataclass
 from typing import final
 
 from application.dtos.stage import StageDTO
-from application.dtos.team import TeamDTO
+from application.dtos.team import (
+    TeamDTO, TeamPasswordDTO
+)
 from backend.src.presentation.schemas.responses import (
     StageResponseSchema,
-    TeamResponseSchema, TeamsResponseSchema,
+    TeamResponseSchema, TeamsResponseSchema, TeamPasswordResponseSchema,
 )
 from presentation.mappers.problem import ProblemPresentationMapper, DataSetPresentationMapper
-from presentation.schemas.responses import DataSetResponseSchema
+from presentation.schemas.responses import DataSetResponseSchema, ListTeamsPasswordResponseSchema
 
 
 @final
@@ -84,3 +86,68 @@ class TeamsPresentationMapper:
         return TeamsResponseSchema(
             teams=teams
         )
+
+
+@final
+@dataclass(frozen=True, slots=True)
+class TeamPasswordPresentationMapper:
+    """
+    Средство отображения для преобразования Application DTOs в Presentation Response models.
+
+    Это средство отображения изолирует уровень представления от прямых зависимостей от Application DTOs,
+    в соответствии с принципами чистой архитектуры.
+    """
+    @classmethod
+    def to_response(cls, dto: TeamPasswordDTO) -> TeamPasswordResponseSchema:
+        """Преобразуйте Application DTO в API Response model."""
+        return TeamPasswordResponseSchema(
+            name=dto.name,
+            email=str(dto.email),
+            password=dto.password,
+        )
+
+@final
+@dataclass(frozen=True, slots=True)
+class TeamsPasswordPresentationMapper:
+    """
+    Средство отображения для преобразования Application DTOs в Presentation Response models.
+
+    Это средство отображения изолирует уровень представления от прямых зависимостей от Application DTOs,
+    в соответствии с принципами чистой архитектуры.
+    """
+
+    mapper = TeamPasswordPresentationMapper
+
+    @classmethod
+    def to_response(cls, dto: list[TeamPasswordDTO]) -> ListTeamsPasswordResponseSchema:
+        """Преобразуйте Application DTO в API Response model."""
+        return ListTeamsPasswordResponseSchema(
+            teams=[
+                TeamPasswordPresentationMapper.to_response(i_dto)
+                for i_dto in dto
+            ]
+        )
+
+
+@final
+@dataclass(frozen=True, slots=True)
+class TeamsPasswordPresentationMapper:
+    """
+    Средство отображения для преобразования Application DTOs в Presentation Response models.
+
+    Это средство отображения изолирует уровень представления от прямых зависимостей от Application DTOs,
+    в соответствии с принципами чистой архитектуры.
+    """
+
+    mapper = TeamPasswordPresentationMapper
+
+    @classmethod
+    def to_response(cls, dto: list[TeamPasswordDTO]) -> ListTeamsPasswordResponseSchema:
+        """Преобразуйте Application DTO в API Response model."""
+        return ListTeamsPasswordResponseSchema(
+            teams=[
+                TeamPasswordPresentationMapper.to_response(i_dto)
+                for i_dto in dto
+            ]
+        )
+

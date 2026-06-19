@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Request, Body
+from uuid import UUID
+
+from fastapi import APIRouter, Request, Body, Path
 
 from application.dtos.email import EmailDTO
-from application.dtos.team import CreateTeamDTO
+from application.dtos.team import CreateTeamDTO, TeamPasswordDTO
 from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
 # from backend.src.application.dtos.problem import CreateProblemDTO, DataSetDTO
 # from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
@@ -9,7 +11,7 @@ from backend.src.application.use_cases.teams.list_teams import GetTeamsUseCase
 from backend.src.application.use_cases.teams.create_team import CreateTeamUseCase
 from backend.src.presentation.mappers.team import (
     TeamPresentationMapper,
-    TeamsPresentationMapper
+    TeamsPresentationMapper, TeamsPasswordPresentationMapper
 )
 from backend.src.presentation.schemas.request import (
     CreateTeamRequest
@@ -18,7 +20,7 @@ from backend.src.presentation.schemas.responses import (
     TeamsResponseSchema,
     TeamResponseSchema
 )
-
+from presentation.schemas.responses import ListTeamsPasswordResponseSchema
 
 router = APIRouter(prefix="/team", tags=["Team"])
 
@@ -80,3 +82,37 @@ async def register_team(
 
     team_dto = await CreateTeamUseCase(dto)
     return TeamPresentationMapper.to_response(team_dto)
+
+
+@router.post(
+    "/get_password_for_event/{event_id}",
+    response_model=ListTeamsPasswordResponseSchema,
+    summary="Create new problem",
+    responses={
+        200: {"description": "Problems retrieved successfully"},
+        400: {"description": "Bad request (e.g., invalid external API response)"},
+        404: {"description": "Problems not found"},
+        500: {"description": "Internal server error"},
+        502: {"description": "Failed to notify via message broker"},
+    },
+)
+async def get_password_for_event(
+    request: Request,
+    event_id: UUID = Path(..., description="Product UUID")
+) -> ListTeamsPasswordResponseSchema:
+    """
+    Получение паролей для команд.
+    """
+
+    # await TokenValidatorUseCase(request, StatusEnum.admin)
+
+
+    m = [
+        TeamPasswordDTO(
+            name="Team name 1",
+            email="user@example.com",
+            password="1234"
+        )
+    ]
+
+    return TeamsPasswordPresentationMapper.to_response(m)
