@@ -134,11 +134,19 @@
     const form = document.getElementById("registrationForm");
     const message = document.getElementById("registrationMessage");
     const submitButton = document.getElementById("submitButton");
-    const apiBase = "http://127.0.0.1:8000/api";
+    const apiBase = "http://26.239.170.23:8000/api";
+
+    function readJsonFromStorage(key, fallback) {
+        try {
+            const value = localStorage.getItem(key);
+            return value ? JSON.parse(value) : fallback;
+        } catch (_) {
+            return fallback;
+        }
+    }
 
     function saveTeamLocally(name, email) {
-        const savedProfile = localStorage.getItem("profileData");
-        const profile = savedProfile ? JSON.parse(savedProfile) : {};
+        const profile = readJsonFromStorage("profileData", {});
 
         localStorage.setItem("registeredTeamName", name);
         localStorage.setItem("registeredTeamEmail", email);
@@ -147,10 +155,28 @@
             username: name,
             avatar: profile.avatar || "🚀",
             totalXP: parseInt(localStorage.getItem("totalXP")) || 0,
-            completedLevels: JSON.parse(localStorage.getItem("completedLevels")) || [],
+            completedLevels: readJsonFromStorage("completedLevels", []),
             attempts: profile.attempts || {},
             startTimes: profile.startTimes || {}
         }));
+    }
+
+    async function getErrorMessage(response) {
+        try {
+            const errorData = await response.json();
+            if (Array.isArray(errorData.detail)) {
+                return errorData.detail.map((item) => item.msg || item.type).join("; ");
+            }
+            return errorData.detail || `${response.status} ${response.statusText}`;
+        } catch (_) {
+            if (response.status === 404) {
+                return "Team already exists or event was not found";
+            }
+            if (response.status === 500) {
+                return "Server error. Check event_id on the backend";
+            }
+            return `${response.status} ${response.statusText}`;
+        }
     }
 
     form.addEventListener("submit", async (event) => {
@@ -169,14 +195,18 @@
         message.textContent = "Сохраняем заявку на сервере...";
 
         try {
-            const response = await fetch(`${apiBase}/registration-applications`, {
+            const response = await fetch(`${apiBase}/team/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email })
+                body: JSON.stringify({
+                    name,
+                    email,
+                    event_id: "e73a0af2-654a-4d6c-96e5-d5e9595a96a7"
+                })
             });
 
             if (!response.ok) {
-                throw new Error("server_error");
+                throw new Error(await getErrorMessage(response));
             }
 
             saveTeamLocally(name, email);
@@ -185,8 +215,11 @@
                 window.location.href = "index.html";
             }, 700);
         } catch (error) {
+            const fallbackErrorMessage = `Registration failed: ${error.message}`;
+            message.textContent = fallbackErrorMessage;
             message.textContent = "Не удалось сохранить заявку. Проверьте, что backend запущен.";
             message.classList.add("error");
+            message.textContent = fallbackErrorMessage;
             submitButton.disabled = false;
         }
     });
