@@ -3,6 +3,7 @@ import structlog
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
+from application.dtos.problem import ProblemDTO
 from backend.src.domain.entities.problem import ProblemEntity
 from backend.src.application.mappers import ProblemMapper
 from backend.src.infrastructures.repositories.problem import ProblemRepositoriesSQLAlchemy
@@ -53,6 +54,26 @@ class GetProblemFromRepoUseCase:
             else:
                 logger.info("Problem not found in repository")
             return problem_entity
+
+    @classmethod
+    async def GetByEvent_Stage(cls, unique_id: UUID, stage: int) -> list[ProblemDTO]:
+        """
+        Выполняет сценарий для получения задачи из хранилища.
+
+        :return: ProblemEntity, если она найдена в репозитории, в противном случае None.
+        """
+
+        async with (cls.uow as session):
+            problems_entity: list[ProblemEntity] = await cls.repository.get_by_event_stage(session, unique_id, stage)
+            if problems_entity:
+                logger.info("Problem found in repository")
+            else:
+                logger.info("Problem not found in repository")
+            return [
+                cls.problems_mapper.to_dto(problem_entity)
+                for problem_entity in problems_entity
+            ]
+
 
     @classmethod
     async def GetByName(cls, name: str) -> Optional[ProblemEntity]:

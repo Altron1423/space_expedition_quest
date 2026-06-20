@@ -11,6 +11,7 @@ from backend.src.domain.entities.problem import ProblemEntity
 from backend.src.infrastructures.exceptions import RepositoryGetError, RepositorySaveError, RepositoryConflictError
 from backend.src.infrastructures.mappers.problem import ProblemDBMapper
 from backend.src.infrastructures.models.problem import ProblemModel
+from backend.src.infrastructures.models.event import EventModel
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -74,6 +75,43 @@ class ProblemRepositoriesSQLAlchemy:
         except SQLAlchemyError as err:
             raise RepositoryGetError(
                 f"Failed to retrieve problem by problem_id '{problem_id}': {err}"
+            ) from err
+
+    async def get_by_event_stage(
+            self,
+            session: AsyncSession,
+            event_id: UUID,
+            stage: int
+    ) -> list[ProblemEntity]:
+        """
+        Извлекает задачу из базы данных по её id.
+
+        :param session: AsyncSession, сессия для работы с базой данных.
+        :param event_id: Уникальный id соревнования.
+        :param stage: Этап задачи.
+        :return: Задача, если он найдена, в противном случае - none.
+        :raise RepositorySaveError: Если во время извлечения возникает ошибка базы данных.
+        """
+        try:
+            stmt = (
+                select(ProblemModel)
+                .where(
+                    ProblemModel.events.any(EventModel.unique_id == event_id)
+                )
+                .where(
+                    ProblemModel.stage == stage
+                )
+                .options(selectinload(ProblemModel.data_sets))
+            )
+            result = await session.execute(stmt)
+            problems_model = result.scalars().all()
+            return [
+                self.mapper.to_entity(problem_model)
+                for problem_model in problems_model
+            ]
+        except SQLAlchemyError as err:
+            raise RepositoryGetError(
+                f"Failed to retrieve problem by event_id '{event_id}': {err}"
             ) from err
 
     async def get_by_name(

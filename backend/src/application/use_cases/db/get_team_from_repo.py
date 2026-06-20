@@ -50,9 +50,10 @@ class GetTeamFromRepoUseCase:
             team_entity: Optional[TeamEntity] = await cls.repository.get_by_id(session, unique_id)
             if team_entity:
                 logger.info("Team found in repository")
+                return cls.teams_mapper.to_dto(team_entity)
             else:
                 logger.info("Team not found in repository")
-            return team_entity
+                return None
 
     @classmethod
     async def GetByEventID(cls, unique_id: UUID) -> list[TeamDTO]:

@@ -157,7 +157,7 @@ class TeamRepositoriesSQLAlchemy:
             else:
                 # Создание новой модели с помощью mapper
                 model = self.mapper.to_model(team)
-            session.merge(model)
+            await session.merge(model)
 
         except IntegrityError as err:
             raise RepositoryConflictError(

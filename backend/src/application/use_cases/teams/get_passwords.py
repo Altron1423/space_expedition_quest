@@ -37,7 +37,7 @@ async def GetPasswordUseCase(event_id: UUID) -> list[TeamPasswordDTO]:
                 password=password,
             )
         )
-        replace(team_dto, password=PasswordDTO(value=hashing(password)))
+        team_dto = replace(team_dto, password=PasswordDTO(value=hashing(password)))
         try:
             await SaveTeamInRepoUseCase(team_dto)
         except RepositorySaveError as err:

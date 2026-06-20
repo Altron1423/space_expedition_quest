@@ -2,17 +2,12 @@ from uuid import UUID
 
 import structlog
 
-from dataclasses import replace
 from fastapi import HTTPException
 
-from application.dtos.email import EmailDTO
 from application.dtos.event import LeaderboardDTO
-from application.dtos.password import PasswordDTO
-from application.dtos.team import TeamPasswordDTO, TeamDTO
-from application.security.password import password_generator, hashing
+from application.dtos.team import TeamDTO
 from application.use_cases.db.get_team_from_repo import GetTeamFromRepoUseCase
-from application.use_cases.db.save_team_in_repo import SaveTeamInRepoUseCase
-from backend.src.infrastructures.exceptions import RepositoryGetError, RepositorySaveError
+from backend.src.infrastructures.exceptions import RepositoryGetError
 
 logger = structlog.get_logger(__name__)
 

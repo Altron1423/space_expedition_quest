@@ -7,6 +7,7 @@ from application.dtos.stage import StageDataDTO, FinishStageDataDTO
 from application.dtos.team import CreateTeamDTO
 from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
 from application.use_cases.teams.get_passwords import GetPasswordUseCase
+from application.use_cases.teams.start_stage import StartStageUseCase
 from backend.src.application.use_cases.teams.list_teams import GetTeamsUseCase
 from backend.src.application.use_cases.teams.create_team import CreateTeamUseCase
 from backend.src.presentation.mappers.team import (
@@ -131,20 +132,13 @@ async def start_stage(
     Получение неотсортированный массив с информацией о командах для отображения их списке лидеров.
     """
 
-    await TokenValidatorUseCase(request, StatusEnum.team)
+    team_uuid = await TokenValidatorUseCase(request, StatusEnum.team)
 
-    m = StageDataDTO(
-        name="This problem 1",
-        text="Text problem 1",
-        stage=1,
-        png_name="this_is_pikcha_v_temu.png",
-        problem_id="7932755b-b00c-4425-9c1d-91fc44947c5f",
-        data_set_id="d2f1aad2-dc4a-487e-b8ae-05d339f3d5bb",
-        max_time=480,
-        min_time=180,
-    )
+    stage_data_dto = await StartStageUseCase(team_uuid)
 
-    return StageDataPresentationMapper.to_response(m)
+
+
+    return StageDataPresentationMapper.to_response(stage_data_dto)
 
 
 @router.post(
