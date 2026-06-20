@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космос Квест – Теория</title>
+    <title>Космос Квест – Справка</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
         <div class="logo">КОСМОС</div>
         <div class="menu">
             <a class="menu-link" href="index.html">Задачи</a>
-            <a class="menu-link active" href="theory.html">Теория</a>
+            <a class="menu-link active" href="theory.html">Справка</a>
             <a class="menu-link" href="progress.html">Прогресс</a>
             <a class="menu-link" href="leaderboard.html">Таблица лидеров</a>
         </div>
@@ -45,11 +45,12 @@
             <div class="avatar"></div>
             <div>
                 <div>Профиль</div>
+                <small>KosmosNav99</small>
             </div>
         </div>
     </nav>
 
-    <h1 class="title">ТЕОРЕТИЧЕСКАЯ БАЗА</h1>
+    <h1 class="title">Справочная информация</h1>
 
     <div class="content" style="grid-template-columns: 1fr;">
         <!-- Выпадающий список: Сюжет -->
@@ -97,10 +98,6 @@
     </div>
 </div>
 
-<script>
-    const savedProfile = localStorage.getItem("profileData");
-    const profile = savedProfile ? JSON.parse(savedProfile) : {};
-    document.getElementById("profileName").innerText = profile.username || localStorage.getItem("registeredTeamName") || "KosmosNav99";
-</script>
+<script src="script.js"></script>
 </body>
 </html>

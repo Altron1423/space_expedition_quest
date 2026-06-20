@@ -1,69 +1,78 @@
-<!-- leaderboard.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Космос Квест – Таблица лидеров</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="leaderboard.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Космос Квест — Таблица лидеров</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-    <!-- NAVBAR -->
+
     <nav class="navbar">
+
         <div class="logo">КОСМОС</div>
+
         <div class="menu">
             <a class="menu-link" href="index.html">Задачи</a>
-            <a class="menu-link" href="theory.html">Теория</a>
+            <a class="menu-link" href="theory.html">Справка</a>
             <a class="menu-link" href="progress.html">Прогресс</a>
             <a class="menu-link active" href="leaderboard.html">Таблица лидеров</a>
         </div>
+
         <div class="profile">
             <div class="avatar"></div>
             <div>
                 <div>Профиль</div>
-                <small id="profileName">KosmosNav99</small>
+                <small>KosmosNav99</small>
             </div>
         </div>
+
     </nav>
 
-    <h1 class="title">ТАБЛИЦА ЛИДЕРОВ</h1>
-    <p style="color: #8899bb; margin-bottom: 10px;">🏆 Космический рейтинг исследователей</p>
+    <h1 class="title">
+        ТАБЛИЦА ЛИДЕРОВ
+    </h1>
 
-    <!-- Основная карточка таблицы -->
-    <div class="leaderboard-card">
-        <div class="leaderboard-inner">
-            <h2>📊 Рейтинг пилотов</h2>
-            <div id="leaderboardContainer">
-                <!-- Таблица будет вставлена сюда скриптом -->
-            </div>
-            <div class="update-info">
-                <span>🔄 Данные обновляются автоматически из вашего прогресса</span>
-                <button class="refresh-btn" id="refreshBtn">⟳ Обновить</button>
-            </div>
+    <div class="page-layout">
+
+        <div class="lesson-card">
+
+            <table class="leaderboard">
+                <thead>
+                <tr>
+                    <th>Место</th>
+                    <th>Команда</th>
+                    <th>Этап</th>
+                    <th>Очки</th>
+                </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                <!-- Строки добавляются скриптом из leaderboard.js -->
+                <tr>
+                    <td colspan="4">Загрузка...</td>
+                </tr>
+                </tbody>
+            </table>
+
         </div>
+
     </div>
 
-    <!-- Блок с пояснением -->
-    <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 16px;">
-        <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06);">
-            <span style="color: #ffd966;">🥇 1 место</span> – 150 XP бонус
-        </div>
-        <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06);">
-            <span style="color: #b0b8c0;">🥈 2 место</span> – 100 XP бонус
-        </div>
-        <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06);">
-            <span style="color: #cd7f32;">🥉 3 место</span> – 50 XP бонус
-        </div>
-    </div>
 </div>
 
-<!-- Подключаем отдельный JavaScript файл -->
+<script src="config.js"></script>
 <script src="leaderboard.js"></script>
+
 </body>
 </html>

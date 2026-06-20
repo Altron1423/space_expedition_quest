@@ -3,141 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космос Квест – Код Галактики</title>
+
+    <title>Космос Квест</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
-    <style>
-        .timer-panel {
-            background: rgba(0,0,0,0.6);
-            border-radius: 16px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffd966;
-        }
-        .timer-value {
-            font-size: 28px;
-            font-family: monospace;
-            color: #00ffcc;
-        }
-        .xp-potential {
-            font-size: 14px;
-            color: #aaa;
-        }
-        .show-task-btn {
-            width: 100%;
-            margin-top: 20px;
-            border: none;
-            cursor: pointer;
-            color: white;
-            font-size: 18px;
-            font-weight: 700;
-            padding: 18px;
-            border-radius: 16px;
-            background: linear-gradient(90deg, #00d9ff, #b14cff);
-            transition: .3s;
-        }
-        .show-task-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(0,217,255,.5);
-        }
-        .task-section {
-            margin-top: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 <body>
 
 <div class="container">
+
     <nav class="navbar">
+
         <div class="logo">КОСМОС</div>
+
         <div class="menu">
             <a class="menu-link active" href="index.html">Задачи</a>
-            <a class="menu-link" href="theory.html">Теория</a>
+            <a class="menu-link" href="theory.html">Справка</a>
             <a class="menu-link" href="progress.html">Прогресс</a>
             <a class="menu-link" href="leaderboard.html">Таблица лидеров</a>
+            <a class="menu-link" href="register.html">Регистрация</a>
         </div>
-        <a href="profile.html" style="text-decoration: none; color: inherit;">
-            <div class="profile" id="profileNav">
-                <div class="avatar" id="profileAvatar">🚀</div>
-                <div>
-                    <div>Профиль</div>
-                    <small id="profileName">KosmosNav99</small>
-                </div>
+
+        <div class="profile">
+            <div class="avatar"></div>
+            <div>
+                <div>Профиль</div>
+                <small>KosmosNav99</small>
             </div>
-        </a>
+        </div>
+
     </nav>
 
-    <h1 class="title">КОД ГАЛАКТИКИ: НАСЛЕДИЕ ПРОТОНА</h1>
+    <h1 class="title">
+        КОСМОС КВЕСТ: РЕШЕНИЕ ЗАДАЧ
+    </h1>
 
     <div class="content">
-        <!-- Левая колонка: комикс + задание -->
-        <div class="card" id="comicCard">
+
+        <div class="card">
+
             <div class="card-inner">
-                <div class="task-title" id="levelTitle">ЗАГРУЗКА...</div>
-                <div class="task-image" id="comicPlaceholder">
-                    🎬 КОМИКС: [СКРИНШОТ]
-                </div>
-                <div class="task-text" id="comicText">
-                    Загрузка сюжета...
-                </div>
 
-                <!-- Кнопка показа задания -->
-                <button id="showTaskBtn" class="show-task-btn">📋 ПОКАЗАТЬ ЗАДАНИЕ</button>
+                <!-- ===== СЛАЙД 1: КОМИКС-КАРТИНКА (15 секунд) ===== -->
+                <div id="comicStage">
 
-                <!-- Секция задания (изначально скрыта) -->
-                <div id="taskSection" class="task-section hidden">
-                    <div class="task-text" id="taskText" style="margin-top: 20px; font-weight: bold;">
-                        <!-- Текст задания появится здесь -->
+                    <div class="task-title" id="comicTitle">
+                        Загрузка...
                     </div>
+
+                    <div class="task-image" id="comicImage">
+                        ИЛЛЮСТРАЦИЯ ЗАГРУЖАЕТСЯ...
+                    </div>
+
+                    <p class="intro-hint" id="comicHint" style="margin-top:15px;color:#8899bb;">
+                        Подождите 15 секунд...
+                    </p>
+
                 </div>
+
+                <!-- ===== СЛАЙД 2: ЗАДАЧА ===== -->
+                <div id="taskStage" style="display:none;">
+
+                    <div class="task-title" id="taskTitle">
+                        Загрузка...
+                    </div>
+
+                    <div class="task-text" id="taskText"></div>
+
+                    <div class="task-image" id="taskImage">
+                        ИЛЛЮСТРАЦИЯ ЗАДАЧИ
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- Правая колонка: прогресс, таймер, ответ, помощь -->
         <div class="sidebar">
+
             <div class="progress-card">
                 <div class="panel">
+
                     <div class="progress-top">
-                        <span id="xpDisplay">0 XP</span>
+                        <span id="topXP">— XP</span>
+                        <span id="topLevel">Уровень —</span>
                     </div>
+
                     <div class="progress">
-                        <div class="progress-fill" id="xpProgressFill" style="width: 0%;"></div>
+                        <div class="progress-fill"></div>
                     </div>
-                    <div class="timer-panel">
-                        ⏱️ Время на задание:<br>
-                        <span class="timer-value" id="timerDisplay">--:--</span><br>
-                        <span class="xp-potential" id="potentialXP">⏳ Нажмите "Показать задание"</span>
-                    </div>
+
                 </div>
             </div>
 
-            <div class="answer-card" id="answerCard">
+            <!-- На слайде комикса показываем кнопку "Далее" вместо поля ответа -->
+            <div class="answer-card" id="comicNextCard">
+                <div class="panel" style="text-align:center;">
+
+                    <h3>Комикс</h3>
+
+                    <p style="color:#8899bb;margin-bottom:20px;">
+                        Прочитайте описание ситуации перед заданием.
+                    </p>
+
+                    <button id="comicNextBtn" class="submit" disabled>
+                        ДАЛЕЕ (15)
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- На слайде задачи показываем обычное поле ответа -->
+            <div class="answer-card" id="answerCard" style="display:none;">
                 <div class="panel">
+
                     <h3>Ваш ответ</h3>
-                    <input id="answer" type="text" placeholder="Введите ответ..." disabled>
-                    <button id="submitBtn" class="submit" disabled>ПОДТВЕРДИТЬ ОТВЕТ</button>
-                    <div id="result" class="answer-result"></div>
+
+                    <input
+                        id="answer"
+                        type="text"
+                        placeholder="Введите ответ...">
+
+                    <button
+                        id="submitBtn"
+                        class="submit">
+                        ПОДТВЕРДИТЬ ОТВЕТ
+                    </button>
+
+                    <div
+                        id="result"
+                        class="answer-result">
+                    </div>
+
                 </div>
             </div>
 
-            <div class="help-card">
+            <div class="help-card" id="helpCard" style="display:none;">
                 <div class="panel">
-                    <div class="help-item" id="hintBtn">💡 Подсказка</div>
-                    <div class="help-item" id="resetBtn">🔄 Сбросить прогресс</div>
+
+                    <div class="help-item">
+                        👁 Показать решение
+                    </div>
+
+                    <div class="help-item">
+                        💡 Подсказка
+                    </div>
+
                 </div>
             </div>
+
         </div>
+
     </div>
+
 </div>
 
+<script src="config.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>

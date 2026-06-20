@@ -179,6 +179,69 @@
         }
     }
 
+    // После регистрации команды нужно сразу войти, чтобы получить токен
+    // для дальнейшей игры (start_stage/finish_stage требуют авторизации).
+    //
+    // ⚠️ ВРЕМЕННОЕ РЕШЕНИЕ: ручка get_password_for_event оказалась
+    // административной (требует прав админа, которых у только что
+    // зарегистрированной команды нет) — вызов с фронта команды
+    // возвращал ошибку. Пока на бэке у ВСЕХ команд один и тот же
+    // фиксированный пароль "StrongP@ssw0rd" (подтверждено бэкендером),
+    // логинимся им напрямую, без похода за индивидуальным паролем.
+    //
+    // Когда бэк введёт реальные индивидуальные пароли — нужно будет
+    // либо показывать пароль команде после регистрации (если бэк
+    // будет его возвращать в ответе team/register), либо организатор
+    // должен выдавать пароли вручную через админский интерфейс.
+    const TEMPORARY_FIXED_PASSWORD = "StrongP@ssw0rd";
+
+    // ⚠️ event_id больше НЕ зашит жёстко в коде — он раньше был устаревшим
+    // и из-за этого регистрация падала с 404 (событие с тем ID не существовало
+    // на бэке). Теперь event_id запрашивается динамически через
+    // GET /api/event/get_all и берётся из первого события в списке.
+    //
+    // Это рабочее решение только пока в системе ОДНО активное соревнование.
+    // Если будет несколько событий одновременно — нужно дать организатору
+    // выбрать нужное (например, через выпадающий список на этой странице).
+
+    async function getCurrentEventId() {
+
+        const response = await fetch(`${apiBase}/event/get_all`);
+
+        if (!response.ok) {
+            throw new Error("Не удалось получить список событий с сервера");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.events) || data.events.length === 0) {
+            throw new Error("На сервере не найдено ни одного события");
+        }
+
+        return data.events[0].unique_id;
+    }
+
+    async function autoLoginAfterRegister(teamName) {
+
+        const loginResponse = await fetch(`${apiBase}/authorize/team/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: teamName,
+                password: { value: TEMPORARY_FIXED_PASSWORD }
+            })
+        });
+
+        if (!loginResponse.ok) {
+            throw new Error("Не удалось войти под только что зарегистрированной командой");
+        }
+
+        const loginData = await loginResponse.json();
+        localStorage.setItem("access_token", loginData.access_token);
+        localStorage.setItem("refresh_token", loginData.refresh_token);
+        localStorage.setItem("team_name", teamName);
+    }
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         message.classList.remove("error");
@@ -192,16 +255,20 @@
         const name = document.getElementById("teamName").value.trim();
         const email = document.getElementById("teamEmail").value.trim();
         submitButton.disabled = true;
-        message.textContent = "Сохраняем заявку на сервере...";
+        message.textContent = "Получаем данные события...";
 
         try {
+            const eventId = await getCurrentEventId();
+
+            message.textContent = "Сохраняем заявку на сервере...";
+
             const response = await fetch(`${apiBase}/team/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name,
                     email,
-                    event_id: "e73a0af2-654a-4d6c-96e5-d5e9595a96a7"
+                    event_id: eventId
                 })
             });
 
@@ -210,7 +277,11 @@
             }
 
             saveTeamLocally(name, email);
-            message.textContent = "Заявка сохранена. Переходим к квесту...";
+
+            message.textContent = "Получаем доступ к игре...";
+            await autoLoginAfterRegister(name);
+
+            message.textContent = "Готово! Переходим к квесту...";
             window.setTimeout(() => {
                 window.location.href = "index.html";
             }, 700);

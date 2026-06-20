@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Космос Квест — Вступление</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .intro-wrap{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            margin-top:40px;
+            gap:25px;
+        }
+
+        .video-card{
+            width:100%;
+            max-width:900px;
+            padding:2px;
+            border-radius:28px;
+            background:linear-gradient(135deg,#00d9ff,#b14cff);
+        }
+
+        .video-card-inner{
+            background:#071122;
+            border-radius:26px;
+            padding:20px;
+        }
+
+        video{
+            width:100%;
+            border-radius:18px;
+            display:block;
+            background:#000;
+        }
+
+        .intro-hint{
+            color:#8899bb;
+            font-size:15px;
+            text-align:center;
+        }
+
+        #introNextBtn{
+            width:auto;
+            padding:18px 50px;
+        }
+
+        #introNextBtn:disabled{
+            opacity:.4;
+            cursor:not-allowed;
+            transform:none !important;
+            box-shadow:none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <nav class="navbar">
+        <div class="logo">КОСМОС</div>
+    </nav>
+
+    <h1 class="title">КОСМОС КВЕСТ: НАЧАЛО ЭКСПЕДИЦИИ</h1>
+
+    <div class="intro-wrap">
+
+        <div class="video-card">
+            <div class="video-card-inner">
+                <!--
+                    Файл видео-вступления должен лежать рядом с проектом,
+                    например в файле intro.mp4.
+                    Если у вас другое имя/формат файла — поменяйте src ниже.
+                -->
+                <video id="introVideo" controls playsinline>
+                    <source src="video/IMG_3134.mp4" type="video/mp4">
+                    Ваш браузер не поддерживает воспроизведение видео.
+                </video>
+            </div>
+        </div>
+
+        <p class="intro-hint" id="introHint">
+            Досмотрите видео до конца, чтобы продолжить.
+        </p>
+
+        <button id="introNextBtn" class="submit" disabled>
+            ДАЛЕЕ
+        </button>
+
+    </div>
+
+</div>
+
+<script src="intro.js"></script>
+
+</body>
+</html>
