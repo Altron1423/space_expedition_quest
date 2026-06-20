@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космос Квест – Прогресс</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <nav class="navbar">
+        <div class="logo">КОСМОС</div>
+        <div class="menu">
+            <a class="menu-link" href="index.html">Задачи</a>
+            <a class="menu-link" href="theory.html">Теория</a>
+            <a class="menu-link active" href="progress.html">Прогресс</a>
+            <a class="menu-link" href="leaderboard.html">Таблица лидеров</a>
+        </div>
+    </nav>
+    <h1 class="title">ВАШ КОСМИЧЕСКИЙ ПРОГРЕСС</h1>
+    <div class="progress-card" style="margin-bottom: 30px;">
+        <div class="panel">
+            <div class="progress-top"><span id="xpValue">0 XP</span></div>
+            <div class="progress"><div class="progress-fill" id="xpFill" style="width:0%"></div></div>
+        </div>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-box"><div>✅</div><h2 id="solvedCount">0</h2><p>пройдено уровней</p></div>
+        <div class="stat-box"><div>⚡</div><h2 id="avgXP">0</h2><p>средний XP за уровень</p></div>
+        <div class="stat-box"><div>🏆</div><h2 id="bestXP">0</h2><p>лучший результат</p></div>
+    </div>
+    <div class="lesson-card"><h2>📊 Детальная статистика</h2><p id="statsDetail"></p></div>
+</div>
+<script>
+    function loadProgress() {
+        const savedProfile = localStorage.getItem("profileData");
+        const profile = savedProfile ? JSON.parse(savedProfile) : {};
+        document.getElementById("profileName").innerText = profile.username || localStorage.getItem("registeredTeamName") || "KosmosNav99";
+        let totalXP = parseInt(localStorage.getItem("totalXP")) || 0;
+        let completed = JSON.parse(localStorage.getItem("completedLevels")) || [];
+        let solved = completed.filter(v=>v===true).length;
+        document.getElementById("xpValue").innerText = totalXP + " XP";
+        let percent = Math.min(100, (totalXP % 1000) / 10);
+        document.getElementById("xpFill").style.width = percent + "%";
+        document.getElementById("solvedCount").innerText = solved;
+        // Средний XP за пройденные уровни (максимум за уровень 100)
+        let avg = solved ? (totalXP / solved).toFixed(1) : 0;
+        document.getElementById("avgXP").innerText = avg;
+        // Лучший XP за один уровень (из сохранённых данных не хранится, вычислим приблизительно)
+        document.getElementById("bestXP").innerText = Math.min(100, Math.floor(totalXP / Math.max(1,solved))) + " (макс. 100)";
+        document.getElementById("statsDetail").innerHTML = `Всего XP: ${totalXP}<br>Пройдено уровней: ${solved} из 12<br>Осталось заданий: ${12-solved}`;
+    }
+    loadProgress();
+</script>
+</body>
+</html>
