@@ -29,7 +29,7 @@ async def GetLeaderboardEventUseCase(event_id: UUID) -> list[LeaderboardDTO]:
             LeaderboardDTO(
                 name=team_dto.name,
                 score=0,
-                stage=team_dto.stage_mow,
+                stage=team_dto.stage_now,
             )
         )
 

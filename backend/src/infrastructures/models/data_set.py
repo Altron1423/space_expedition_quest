@@ -36,11 +36,8 @@ class DataSetModel(Base):
 
     problem: Mapped["ProblemModel"] = relationship(
         "ProblemModel",
-        back_populates="data_sets"
-    )
-    stages: Mapped[list["StageModel"]] = relationship(
-        "StageModel",
-        back_populates="data_set"
+        back_populates="data_sets",
+        cascade='save-update, merge'
     )
 
 

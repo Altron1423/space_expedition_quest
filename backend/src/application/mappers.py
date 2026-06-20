@@ -172,8 +172,9 @@ class StageMapper:
         return StageDTO(
             unique_id=entity.unique_id,
             stage=entity.stage,
-            problem=ProblemMapper.to_dto(entity.problem),
-            data_set=DataSetMapper.to_dto(entity.data_set),
+            team_id=entity.team_id,
+            problem=entity.problem,
+            data_set=entity.data_set,
             answer=entity.answer,
             duration=entity.duration,
         )
@@ -186,8 +187,9 @@ class StageMapper:
         return StageEntity(
             unique_id=dto.unique_id,
             stage=dto.stage,
-            problem=ProblemMapper.to_entity(dto.problem),
-            data_set=DataSetMapper.to_entity(dto.data_set),
+            team_id=dto.team_id,
+            problem=dto.problem,
+            data_set=dto.data_set,
             answer=dto.answer,
             duration=dto.duration,
         )
@@ -215,7 +217,9 @@ class TeamMapper:
             name=entity.name,
             password=PasswordDTO(value=entity.password.value),
             email=EmailDTO(value=entity.email.value),
-            stage_mow=entity.stage_mow,
+            work_problem_id=entity.work_problem_id,
+            work_data_set_id=entity.work_data_set_id,
+            stage_now=entity.stage_now,
             start_stage=entity.start_stage,
             event_id=entity.event_id,
             stages=[
@@ -234,7 +238,9 @@ class TeamMapper:
             name=dto.name,
             password=UserPassword(value=dto.password.value),
             email=UserEmail(value=dto.email.value),
-            stage_mow=dto.stage_mow,
+            work_problem_id=dto.work_problem_id,
+            work_data_set_id=dto.work_data_set_id,
+            stage_now=dto.stage_now,
             start_stage=dto.start_stage,
             event_id=dto.event_id,
             stages=[
@@ -324,7 +330,9 @@ class CreateTeamMapper:
             event_id=dto.event_id,
             password=UserPassword(value=hashing("StrongP@ssw0rd")),
             email=UserEmail(value=dto.email.value),
-            stage_mow=0,
+            work_problem_id=None,
+            work_data_set_id=None,
+            stage_now=0,
             start_stage=datetime.now(UTC),
             stages=[]
         )

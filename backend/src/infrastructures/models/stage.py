@@ -1,11 +1,12 @@
 from datetime import timedelta
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, String, Text, JSON, DateTime
+from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
 from backend.src.infrastructures.models.base import Base
+from backend.src.infrastructures.models.team import TeamModel
 
 
 class StageModel(Base):
@@ -22,35 +23,30 @@ class StageModel(Base):
         primary_key=True,
         nullable=False,
     )
-    stage: Mapped[int]
+    stage: Mapped[int] = mapped_column(
+        nullable=False,
+    )
 
     team_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),
         ForeignKey("team.unique_id"),
-        nullable=False,
+        nullable=False
     )
-    problem_id: Mapped[UUID] = mapped_column(
+    problem: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),
         ForeignKey("problem.unique_id"),
         nullable=False,
     )
-    data_set_id: Mapped[UUID] = mapped_column(
+    data_set: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),
         ForeignKey("data_set.unique_id"),
         nullable=False,
     )
 
-    team: Mapped["TeamModel"] = relationship(
+    team: Mapped[TeamModel] = relationship(
         "TeamModel",
-        back_populates="stages"
-    )
-    problem: Mapped["ProblemModel"] = relationship(
-        "ProblemModel",
-        back_populates="stages"
-    )
-    data_set: Mapped["DataSetModel"] = relationship(
-        "DataSetModel",
-        back_populates="stages"
+        back_populates="stages",
+        cascade='save-update, merge'
     )
 
     answer: Mapped[str] = mapped_column(nullable=False)

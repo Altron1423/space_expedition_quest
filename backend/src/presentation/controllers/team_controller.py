@@ -3,9 +3,10 @@ from uuid import UUID
 from fastapi import APIRouter, Request, Body, Path
 
 from application.dtos.email import EmailDTO
-from application.dtos.stage import StageDataDTO, FinishStageDataDTO
+from application.dtos.stage import StageDataDTO, FinishStageDataDTO, AnswerDataDTO
 from application.dtos.team import CreateTeamDTO
 from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
+from application.use_cases.teams.finish_stage import FinishStageUseCase
 from application.use_cases.teams.get_passwords import GetPasswordUseCase
 from application.use_cases.teams.start_stage import StartStageUseCase
 from backend.src.application.use_cases.teams.list_teams import GetTeamsUseCase
@@ -81,7 +82,6 @@ async def register_team(
         email=EmailDTO(value=body.email),
         event_id=body.event_id,
     )
-
     team_dto = await CreateTeamUseCase(dto)
     return TeamPresentationMapper.to_response(team_dto)
 
@@ -161,12 +161,20 @@ async def finish_stage(
     Получение неотсортированный массив с информацией о командах для отображения их списке лидеров.
     """
 
-    await TokenValidatorUseCase(request, StatusEnum.team)
+    team_uuid = await TokenValidatorUseCase(request, StatusEnum.team)
 
-    m = FinishStageDataDTO(
-        complete=True,
-        comics_png_name="this_is_comiks_v_temu.png"
+    answer_dto = AnswerDataDTO(
+        answer=body.answer,
+        problem_id=body.problems_id,
+        data_set_id=body.data_set_id
     )
 
-    return FinishStageDataPresentationMapper.to_response(m)
+    finish_stage_dto = await FinishStageUseCase(team_uuid, answer_dto)
+
+    # finish_stage_dto = FinishStageDataDTO(
+    #     complete=True,
+    #     comics_png_name="this_is_comiks_v_temu.png"
+    # )
+
+    return FinishStageDataPresentationMapper.to_response(finish_stage_dto)
 

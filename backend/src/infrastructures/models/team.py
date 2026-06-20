@@ -1,4 +1,5 @@
 from datetime import datetime, UTC
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import DateTime, func, ForeignKey, String
@@ -28,6 +29,15 @@ class TeamModel(Base):
     email: Mapped[str] = mapped_column(String(), nullable=False)
 
     stage_now: Mapped[int] = mapped_column(nullable=False)
+    work_problem_id: Mapped[Optional[UUID]] = mapped_column(
+        PG_UUID(as_uuid=True),
+        nullable=True,
+    )
+    work_data_set_id: Mapped[Optional[UUID]] = mapped_column(
+        PG_UUID(as_uuid=True),
+        nullable=True,
+    )
+
     start_stage: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
@@ -43,7 +53,9 @@ class TeamModel(Base):
 
     stages: Mapped[list["StageModel"]] = relationship(
         "StageModel",
-        back_populates="team"
+        back_populates="team",
+        cascade='save-update, merge',
+        passive_deletes="all"
     )
     events: Mapped["EventModel"] = relationship(
         back_populates="teams",

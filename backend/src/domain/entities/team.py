@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime, UTC
-from typing import final
+from typing import final, Optional
 from uuid import UUID
 
 from backend.src.domain.exceptions import DomainValidationError
@@ -21,7 +21,9 @@ class TeamEntity:
     name: str
     password: UserPassword = field(default_factory=UserPassword)
     email: UserEmail = field(default_factory=UserEmail)
-    stage_mow: int
+    work_problem_id: Optional[UUID]
+    work_data_set_id: Optional[UUID]
+    stage_now: int
     start_stage: datetime = field(default_factory=lambda: datetime.now(UTC))
     event_id: UUID
     stages: list[StageEntity]

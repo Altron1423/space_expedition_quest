@@ -21,7 +21,7 @@ class GetProblemFromRepoUseCase:
     repository: ProblemRepositoriesSQLAlchemy = ProblemRepositoriesSQLAlchemy()
 
     @classmethod
-    async def GetList(cls) -> list[ProblemEntity]:
+    async def GetList(cls) -> list[ProblemDTO]:
         """
         Выполняет сценарий для всех задач из хранилища.
 
@@ -40,7 +40,7 @@ class GetProblemFromRepoUseCase:
             ]
 
     @classmethod
-    async def GetById(cls, unique_id: UUID) -> Optional[ProblemEntity]:
+    async def GetById(cls, unique_id: UUID) -> Optional[ProblemDTO]:
         """
         Выполняет сценарий для получения задачи из хранилища.
 
@@ -51,9 +51,10 @@ class GetProblemFromRepoUseCase:
             problem_entity: Optional[ProblemEntity] = await cls.repository.get_by_id(session, unique_id)
             if problem_entity:
                 logger.info("Problem found in repository")
+                return cls.problems_mapper.to_dto(problem_entity)
             else:
                 logger.info("Problem not found in repository")
-            return problem_entity
+                return None
 
     @classmethod
     async def GetByEvent_Stage(cls, unique_id: UUID, stage: int) -> list[ProblemDTO]:

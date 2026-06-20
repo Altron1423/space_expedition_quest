@@ -32,11 +32,8 @@ class ProblemModel(Base):
     data_sets: Mapped[list[DataSetModel]] = relationship(
         "DataSetModel",
         back_populates="problem",
-        lazy="selectin"
-    )
-    stages: Mapped[list["StageModel"]] = relationship(
-        "StageModel",
-        back_populates="problem"
+        lazy="selectin",
+        cascade='save-update, merge'
     )
     events: Mapped[list["EventModel"]] = relationship(
         back_populates="problems",

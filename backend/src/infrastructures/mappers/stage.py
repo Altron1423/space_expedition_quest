@@ -2,9 +2,7 @@ from dataclasses import dataclass
 from typing import final
 
 from backend.src.domain.entities.stage import StageEntity
-from backend.src.infrastructures.mappers.data_set import DataSetDBMapper
 from backend.src.infrastructures.models.stage import StageModel
-from infrastructures.mappers.problem import ProblemDBMapper
 
 
 @final
@@ -28,9 +26,11 @@ class StageDBMapper:
         """
         return StageEntity(
             unique_id=model.unique_id,
+            answer=model.answer,
+            team_id=model.team_id,
             stage=model.stage,
-            problem=ProblemDBMapper.to_entity(model.problem),
-            data_set=DataSetDBMapper.to_entity(model.data_set),
+            problem=model.problem,
+            data_set=model.data_set,
             duration=model.duration,
         )
 
@@ -45,9 +45,11 @@ class StageDBMapper:
         """
         return StageModel(
             unique_id=entity.unique_id,
+            answer=entity.answer,
+            team_id=entity.team_id,
             stage=entity.stage,
-            problem=ProblemDBMapper.to_model(entity.problem),
-            data_set=DataSetDBMapper.to_model(entity.data_set),
+            problem=entity.problem,
+            data_set=entity.data_set,
             duration=entity.duration,
         )
 
@@ -63,7 +65,9 @@ class StageDBMapper:
         :param model: Существующая SQLAlchemy StageModel для обновления.
         :param entity: Объект домена StageEntity, содержащий новые данные.
         """
+        model.answer = entity.answer
         model.stage = entity.stage
-        model.problem = ProblemDBMapper.to_model(entity.problem)
-        model.data_set = DataSetDBMapper.to_model(entity.data_set)
+        model.team_id = entity.team_id
+        model.problem = entity.problem
+        model.data_set = entity.data_set
         model.duration = entity.duration

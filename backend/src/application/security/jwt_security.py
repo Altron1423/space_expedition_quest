@@ -1,4 +1,5 @@
 import hashlib
+from datetime import timedelta
 
 from authx import AuthX, AuthXConfig
 
@@ -9,6 +10,7 @@ def create_security(
 )->AuthX:
     config = AuthXConfig()
 
+    config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=10)
     config.JWT_SECRET_KEY = settings.jwt_secret_key
     config.JWT_ACCESS_COOKIE_NAME = settings.jwt_access_cookie_name
     config.JWT_REFRESH_COOKIE_NAME = settings.jwt_refresh_cookie_name

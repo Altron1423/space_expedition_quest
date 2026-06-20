@@ -19,8 +19,9 @@ class StageDTO:
 
     unique_id: UUID
     stage: int
-    problem: ProblemDTO
-    data_set: DataSetDTO
+    team_id: UUID
+    problem: UUID
+    data_set: UUID
     answer: str
     duration: timedelta
 
@@ -55,3 +56,17 @@ class FinishStageDataDTO:
 
     complete: bool
     comics_png_name: str | None
+
+
+@final
+@dataclass(frozen=True, slots=True, kw_only=True)
+class AnswerDataDTO:
+    """Прикладной DTO для передачи данных примера между уровнями.
+
+    Примечание: Этот DTO не выполняет бизнес-проверку.
+    DTO являются простыми носителями данных для межуровневого взаимодействия.
+    """
+
+    answer: str
+    problem_id: UUID
+    data_set_id: UUID

@@ -3,10 +3,6 @@ from datetime import timedelta
 from typing import final
 from uuid import UUID
 
-from backend.src.domain.entities.data_set import DataSetEntity
-from backend.src.domain.entities.problem import ProblemEntity
-# from backend.src.domain.exceptions import DomainValidationError
-
 
 @final
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -18,8 +14,9 @@ class StageEntity:
     """
     unique_id: UUID
     stage: int
-    problem: ProblemEntity
-    data_set: DataSetEntity
+    team_id: UUID
+    problem: UUID
+    data_set: UUID
     answer: str
     duration: timedelta
 

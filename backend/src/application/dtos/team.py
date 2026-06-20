@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import final
+from typing import final, Optional
 from uuid import UUID
 
 from application.dtos.email import EmailDTO
@@ -22,7 +22,9 @@ class TeamDTO:
     name: str
     password: PasswordDTO
     email: EmailDTO
-    stage_mow: int
+    work_problem_id: Optional[UUID]
+    work_data_set_id: Optional[UUID]
+    stage_now: int
     start_stage: datetime
     event_id: UUID
     stages: list[StageDTO]

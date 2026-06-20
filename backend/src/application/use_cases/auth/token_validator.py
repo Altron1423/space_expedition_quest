@@ -26,7 +26,7 @@ logger = structlog.get_logger(__name__)
 
 dict_users_rec = {}
 max_user_rec = 1000
-min_time_user_rec = 3
+min_time_user_rec = 0
 
 uow: UnitOfWorkSQLAlchemy = UnitOfWorkSQLAlchemy()
 

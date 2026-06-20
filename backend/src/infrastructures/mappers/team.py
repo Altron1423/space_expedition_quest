@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import UTC
 from typing import final
 
 from backend.src.domain.entities.team import TeamEntity
@@ -32,8 +33,10 @@ class TeamDBMapper:
             name=model.name,
             password=UserPassword(value=model.password),
             email=UserEmail(value=model.email),
-            stage_mow=model.stage_now,
-            start_stage=model.start_stage,
+            work_problem_id=model.work_problem_id,
+            work_data_set_id=model.work_data_set_id,
+            stage_now=model.stage_now,
+            start_stage=model.start_stage.replace(tzinfo=UTC),
             event_id=model.event_id,
             stages=[
                 StageDBMapper.to_entity(stage)
@@ -55,7 +58,9 @@ class TeamDBMapper:
             name=entity.name,
             password=str(entity.password),
             email=str(entity.email),
-            stage_now=entity.stage_mow,
+            work_problem_id=entity.work_problem_id,
+            work_data_set_id=entity.work_data_set_id,
+            stage_now=entity.stage_now,
             start_stage=entity.start_stage,
             event_id=entity.event_id,
             stages=[
@@ -80,6 +85,10 @@ class TeamDBMapper:
         model.event_id = entity.event_id
         model.password = str(entity.password)
         model.email = str(entity.email)
+        model.work_problem_id = entity.work_problem_id
+        model.work_data_set_id = entity.work_data_set_id
+        model.stage_now = entity.stage_now
+        model.start_stage = entity.start_stage
         model.stages = [
             StageDBMapper.to_model(stage)
             for stage in entity.stages
