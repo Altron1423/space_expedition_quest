@@ -4,10 +4,9 @@ from fastapi import APIRouter, Request, Body, Path
 
 from application.dtos.email import EmailDTO
 from application.dtos.stage import StageDataDTO, FinishStageDataDTO
-from application.dtos.team import CreateTeamDTO, TeamPasswordDTO
+from application.dtos.team import CreateTeamDTO
 from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
-# from backend.src.application.dtos.problem import CreateProblemDTO, DataSetDTO
-# from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
+from application.use_cases.teams.get_passwords import GetPasswordUseCase
 from backend.src.application.use_cases.teams.list_teams import GetTeamsUseCase
 from backend.src.application.use_cases.teams.create_team import CreateTeamUseCase
 from backend.src.presentation.mappers.team import (
@@ -106,18 +105,11 @@ async def get_password_for_event(
     Получение паролей для команд.
     """
 
-    # await TokenValidatorUseCase(request, StatusEnum.admin)
+    await TokenValidatorUseCase(request, StatusEnum.admin)
 
+    passwords_dto = await GetPasswordUseCase(event_id)
 
-    m = [
-        TeamPasswordDTO(
-            name="Team name 1",
-            email="user@example.com",
-            password="1234"
-        )
-    ]
-
-    return TeamsPasswordPresentationMapper.to_response(m)
+    return TeamsPasswordPresentationMapper.to_response(passwords_dto)
 
 
 @router.get(

@@ -15,7 +15,7 @@ logger = structlog.get_logger(__name__)
 
 class GetTeamFromRepoUseCase:
     uow: UnitOfWorkSQLAlchemy = UnitOfWorkSQLAlchemy()
-    problems_mapper: TeamMapper = TeamMapper()
+    teams_mapper: TeamMapper = TeamMapper()
 
     repository: TeamRepositoriesSQLAlchemy = TeamRepositoriesSQLAlchemy()
 
@@ -28,14 +28,14 @@ class GetTeamFromRepoUseCase:
         """
 
         async with cls.uow as session:
-            problem_entities: list[TeamEntity] = await cls.repository.get_list(session)
-            if len(problem_entities) == 0:
+            team_entities: list[TeamEntity] = await cls.repository.get_list(session)
+            if len(team_entities) == 0:
                 logger.info("Teams not found in repository")
             else:
                 logger.info("Teams found in repository")
             return [
-                cls.problems_mapper.to_dto(problem_entity)
-                for problem_entity in problem_entities
+                cls.teams_mapper.to_dto(team_entity)
+                for team_entity in team_entities
             ]
 
     @classmethod
@@ -47,12 +47,31 @@ class GetTeamFromRepoUseCase:
         """
 
         async with cls.uow as session:
-            problem_entity: Optional[TeamEntity] = await cls.repository.get_by_id(session, unique_id)
-            if problem_entity:
+            team_entity: Optional[TeamEntity] = await cls.repository.get_by_id(session, unique_id)
+            if team_entity:
                 logger.info("Team found in repository")
             else:
                 logger.info("Team not found in repository")
-            return problem_entity
+            return team_entity
+
+    @classmethod
+    async def GetByEventID(cls, unique_id: UUID) -> list[TeamDTO]:
+        """
+        Выполняет сценарий для получения команды из хранилища.
+
+        :return: TeamDTO, если она найдена в репозитории, в противном случае None.
+        """
+
+        async with cls.uow as session:
+            teams_entity: list[TeamEntity] = await cls.repository.get_by_event_id(session, unique_id)
+            if teams_entity:
+                logger.info("Team found in repository")
+            else:
+                logger.info("Team not found in repository")
+            return [
+                cls.teams_mapper.to_dto(team_entity)
+                for team_entity in teams_entity
+            ]
 
     @classmethod
     async def GetByName(cls, name: str) -> Optional[TeamDTO]:
@@ -63,10 +82,10 @@ class GetTeamFromRepoUseCase:
         """
 
         async with cls.uow as session:
-            problem_entity: Optional[TeamEntity] = await cls.repository.get_by_name(session, name)
-            if problem_entity:
+            team_entity: Optional[TeamEntity] = await cls.repository.get_by_name(session, name)
+            if team_entity:
                 logger.info("Team found in repository")
             else:
                 logger.info("Team not found in repository")
-            return problem_entity
+            return team_entity
 

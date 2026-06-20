@@ -74,6 +74,34 @@ class TeamRepositoriesSQLAlchemy:
                 f"Failed to retrieve team by team_id '{team_id}': {err}"
             ) from err
 
+    async def get_by_event_id(
+            self,
+            session: AsyncSession,
+            event_id: UUID
+    ) -> list[TeamEntity]:
+        """
+        Извлекает команды из базы данных по id соревнования.
+
+        :param session: AsyncSession, сессия для работы с базой данных.
+        :param event_id: Уникальный id команды.
+        :return: Команда, если он найдена, в противном случае - none.
+        :raise RepositorySaveError: Если во время извлечения возникает ошибка базы данных.
+        """
+        try:
+            stmt = select(TeamModel).where(
+                TeamModel.event_id == event_id
+            ).options(selectinload(TeamModel.stages))
+            result = await session.execute(stmt)
+            team_model: Sequence[TeamModel] = result.scalars().all()
+            return [
+                self.mapper.to_entity(i_team_model)
+                for i_team_model in team_model
+            ]
+        except SQLAlchemyError as err:
+            raise RepositoryGetError(
+                f"Failed to retrieve team by team_id '{event_id}': {err}"
+            ) from err
+
     async def get_by_name(
             self,
             session: AsyncSession,
@@ -119,7 +147,7 @@ class TeamRepositoriesSQLAlchemy:
         try:
             stmt = select(TeamModel).where(
                 TeamModel.unique_id == team.unique_id
-            )
+            ).options(selectinload(TeamModel.stages))
             result = await session.execute(stmt)
             model = result.scalar_one_or_none()
 
@@ -129,7 +157,7 @@ class TeamRepositoriesSQLAlchemy:
             else:
                 # Создание новой модели с помощью mapper
                 model = self.mapper.to_model(team)
-            session.add(model)
+            session.merge(model)
 
         except IntegrityError as err:
             raise RepositoryConflictError(

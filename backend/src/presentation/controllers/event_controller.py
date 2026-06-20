@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Request, Body, Path
 
 from application.use_cases.auth.token_validator import TokenValidatorUseCase, StatusEnum
+from application.use_cases.teams.get_leaderboard import GetLeaderboardEventUseCase
 from backend.src.application.dtos.event import CreateEventDTO, LeaderboardDTO
 # from backend.src.application.use_cases.auth.token_validator import TokenValidatorUseCase
 from backend.src.application.use_cases.events.list_events import GetEventsUseCase
@@ -97,7 +98,7 @@ async def create_event(
         502: {"description": "Failed to notify via message broker"},
     },
 )
-async def get_password_for_event(
+async def get_leaderboard(
     request: Request,
     event_id: UUID = Path(..., description="Product UUID")
 ) -> ListLeaderboardResponseSchema:
@@ -105,22 +106,10 @@ async def get_password_for_event(
     Получение неотсортированный массив с информацией о командах для отображения их списке лидеров.
     """
 
-    # await TokenValidatorUseCase(request, StatusEnum.admin)
+    await TokenValidatorUseCase(request)
 
+    leaders_dto = await GetLeaderboardEventUseCase(event_id)
 
-    m = [
-        LeaderboardDTO(
-            name="Team name 1",
-            score=50,
-            stage=1
-        ),
-        LeaderboardDTO(
-            name="Team name 2",
-            score=120,
-            stage=2
-        )
-    ]
-
-    return LeaderboardPresentationMapper.to_response(m)
+    return LeaderboardPresentationMapper.to_response(leaders_dto)
 
 

@@ -39,4 +39,5 @@ def is_correct(password:str, hashed_password:str)->bool:
     """
     return hashing(password) == hashed_password
 
-
+def password_generator() -> str:
+    return "1234567890"
